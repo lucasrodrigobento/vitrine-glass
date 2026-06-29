@@ -1,0 +1,405 @@
+/* ======================================================
+   Vitrine Glass — site.css
+   Cores via CSS custom properties injetadas por tenant em layouts/app.blade.php
+   ====================================================== */
+
+:root {
+    --cor-primaria:   #183b9f;
+    --cor-secundaria: #1a2a6c;
+}
+
+/* ── Base ── */
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Righteous', cursive;
+    margin: 0;
+    padding: 0;
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.875rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.125rem; }
+h5 { font-size: 0.9rem; }
+h6 { font-size: 0.8rem; }
+
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--cor-primaria); }
+
+/* ── Topbar ── */
+.topbar {
+    background: #f5f5f5;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 0.83rem;
+}
+
+.topbar-item {
+    color: #555;
+    transition: color .2s;
+}
+
+.topbar-item:hover { color: var(--cor-primaria); }
+
+.topbar-social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #ddd;
+    color: #555;
+    font-size: .8rem;
+    transition: background .2s, color .2s;
+}
+
+.topbar-social-link:hover {
+    background: var(--cor-primaria);
+    color: #fff;
+}
+
+/* ── Header / Navbar ── */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,.1);
+}
+
+.site-header .navbar { padding: .75rem 0; }
+
+.site-header .brand-name {
+    font-family: 'Righteous', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--cor-primaria);
+    margin-left: .5rem;
+    vertical-align: middle;
+}
+
+.site-header .nav-link {
+    color: #444;
+    font-weight: 600;
+    font-family: 'Righteous', cursive;
+    font-size: 1rem;
+    padding: .5rem .85rem !important;
+    transition: color .2s;
+}
+
+.site-header .nav-link:hover,
+.site-header .nav-link.active {
+    color: var(--cor-primaria);
+}
+
+/* dropdown */
+.site-header .dropdown-menu {
+    border: none;
+    border-top: 3px solid var(--cor-primaria);
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 6px 16px rgba(0,0,0,.12);
+    padding: .4rem 0;
+    min-width: 210px;
+}
+
+.site-header .dropdown-item {
+    font-family: 'Open Sans', sans-serif;
+    font-size: .9rem;
+    font-weight: 600;
+    color: #444;
+    padding: .55rem 1.25rem;
+    transition: background .15s, color .15s;
+}
+
+.site-header .dropdown-item:hover,
+.site-header .dropdown-item.active {
+    background: var(--cor-primaria);
+    color: #fff;
+}
+
+/* hamburger icon color */
+.site-header .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2868,68,68,1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.site-header .navbar-toggler {
+    border-color: rgba(0,0,0,.15);
+}
+
+/* ── Buttons ── */
+.btn-primary {
+    background-color: var(--cor-primaria);
+    border-color: var(--cor-primaria);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--cor-secundaria);
+    border-color: var(--cor-secundaria);
+}
+
+.btn-outline-primary {
+    color: var(--cor-primaria);
+    border-color: var(--cor-primaria);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--cor-primaria);
+    border-color: var(--cor-primaria);
+    color: #fff;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--cor-primaria);
+    border-color: var(--cor-primaria);
+}
+
+.pagination .page-link { color: var(--cor-primaria); }
+
+/* ── Hero slider ── */
+.hero-slider .carousel-item img {
+    height: 520px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.hero-slider .carousel-caption {
+    background: rgba(0,0,0,.45);
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+    bottom: 3rem;
+    left: 10%;
+    right: 10%;
+    text-align: left;
+}
+
+.hero-slider .carousel-caption h1 {
+    font-size: 2.25rem;
+    color: #fff;
+    margin-bottom: .5rem;
+}
+
+.hero-slider .carousel-caption p {
+    color: #eee;
+    font-size: 1.05rem;
+    margin-bottom: 0;
+}
+
+/* ── Features (layout assimétrico — igual ao original) ── */
+.features-section {
+    padding: 3rem 0;
+    background: #fff;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+/* grupo com múltiplas imagens (f1 grande + f2/f3 empilhadas) */
+.feat-img-multi {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: .75rem;
+}
+
+.feat-img-large img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+    border-radius: 4px 0 0 4px;
+}
+
+.feat-img-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.feat-img-stack img {
+    width: 100%;
+    flex: 1;
+    object-fit: cover;
+    display: block;
+    border-radius: 0 4px 4px 0;
+}
+
+/* grupo com imagem única (f4) */
+.feat-img-single img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+    border-radius: 4px;
+    margin-bottom: .75rem;
+}
+
+.feat-text h4 {
+    font-size: 1.1rem;
+    color: var(--cor-primaria);
+    margin-bottom: .4rem;
+}
+
+.feat-text h4 a { color: inherit; }
+.feat-text h4 a:hover { text-decoration: underline; }
+
+.feat-text p {
+    font-size: .9rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ── Page banners ── */
+.page-banner {
+    padding: 4rem 0 3rem;
+    color: #fff;
+    text-align: center;
+}
+
+.page-banner h1 { color: #fff; }
+
+.page-banner.banner-empresa  { background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria)); }
+.page-banner.banner-contato  { background: linear-gradient(135deg, var(--cor-secundaria), var(--cor-primaria)); }
+.page-banner.banner-servicos { background: linear-gradient(135deg, var(--cor-primaria), #333); }
+
+/* ── Gallery ── */
+.gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px;
+    aspect-ratio: 4/3;
+    background: #eee;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .3s;
+}
+
+.gallery-item:hover img { transform: scale(1.05); }
+
+.gallery-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,.6);
+    color: #fff;
+    padding: .5rem .75rem;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: .95rem;
+}
+
+/* ── MVV cards (sobre) ── */
+.mvv-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.mvv-card i { color: var(--cor-primaria); }
+.mvv-card h4 { color: var(--cor-primaria); margin: .75rem 0 .5rem; }
+.mvv-card p { color: #555; font-size: .9rem; margin: 0; }
+
+/* ── CTA section ── */
+.cta-section { background: var(--cor-primaria); }
+
+/* ── Footer ── */
+.site-footer {
+    background: #1a1a1a;
+    color: #ccc;
+    padding: 3rem 0 1.5rem;
+}
+
+.site-footer h5 {
+    color: #fff;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--cor-primaria);
+    padding-bottom: .4rem;
+    display: inline-block;
+}
+
+.site-footer a { color: #ccc; }
+.site-footer a:hover { color: var(--cor-primaria); }
+
+.site-footer ul.list-unstyled li { margin-bottom: .35rem; }
+
+.footer-copy {
+    background: #111;
+    color: #888;
+    padding: .75rem 0;
+    font-size: .85rem;
+}
+
+/* ── WhatsApp float ── */
+.whatsapp-float {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 56px;
+    height: 56px;
+    background: #25d366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,.25);
+    z-index: 9999;
+    transition: transform .2s;
+}
+
+.whatsapp-float:hover { transform: scale(1.1); color: #fff; }
+
+/* ── Responsive ── */
+@media (max-width: 991px) {
+    /* mobile: dropdown abre inline dentro do collapse */
+    .site-header .dropdown-menu {
+        border-top: none;
+        border-left: 3px solid var(--cor-primaria);
+        box-shadow: none;
+        padding-left: .75rem;
+        border-radius: 0;
+        background: #fafafa;
+    }
+
+    .site-header .nav-link,
+    .site-header .dropdown-item {
+        padding: .6rem 1rem !important;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .topbar-contacts { flex-direction: column; gap: .25rem !important; }
+}
+
+@media (max-width: 768px) {
+    .hero-slider .carousel-item img { height: 260px; }
+    .hero-slider .carousel-caption  { left: 5%; right: 5%; bottom: 1.5rem; padding: 1rem; }
+    .hero-slider .carousel-caption h1 { font-size: 1.4rem; }
+    .hero-slider .carousel-caption p  { font-size: .9rem; }
+
+    h1 { font-size: 1.75rem; }
+    h2 { font-size: 1.5rem; }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .feat-img-large img,
+    .feat-img-single img { height: 200px; }
+
+    .topbar-contacts { display: none !important; }
+}
