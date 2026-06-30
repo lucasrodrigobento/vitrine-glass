@@ -140,8 +140,7 @@ a, a:hover { text-decoration: none; color: #6f7070; }
 
 .header-bottom {
     padding: 0;
-    float: left;
-    width: 100%;
+    clear: both;
 }
 
 /* ── Navbar ── */
