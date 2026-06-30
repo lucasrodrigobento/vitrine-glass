@@ -2,19 +2,18 @@
 
 <div id="topo">
     <div id="topocentro">
-        <ul>
-            <li>
-                <a href="mailto:{{ $t['email'] }}">
-                    <i class="fa fa-envelope"></i>{{ $t['email'] }}
-                </a>
-            </li>
-            <li>
-                <a href="https://api.whatsapp.com/send?phone={{ $t['whatsapp'] }}" target="_blank" rel="noopener">
-                    <i class="fa-brands fa-whatsapp"></i>{{ $t['whatsapp_exibir'] }}
-                </a>
-            </li>
-        </ul>
-        <div class="topo-social">
+        <li>
+            <i class="fa fa-envelope icon-topo"></i>
+            <a href="mailto:{{ $t['email'] }}">{{ $t['email'] }}</a>
+        </li>
+        <li>
+            <i class="fa-brands fa-whatsapp icon-topo"></i>
+            <a href="https://api.whatsapp.com/send?phone={{ $t['whatsapp'] }}" target="_blank" rel="noopener">
+                {{ $t['whatsapp_exibir'] }}
+            </a>
+        </li>
+
+        <div class="social-icons">
             @if(!empty($t['facebook']))
             <a href="https://www.facebook.com/{{ $t['facebook'] }}" target="_blank" rel="noopener" aria-label="Facebook">
                 <i class="fa-brands fa-facebook"></i>
@@ -29,103 +28,110 @@
                 <i class="fa-brands fa-whatsapp"></i>
             </a>
         </div>
-        <div class="clearfix"></div>
     </div>
 </div>
 
-<div class="header">
+<div class="header" id="home">
     <div class="header-top">
         <div class="container">
+
             <div class="logo">
                 <h1>
                     <a href="{{ route('home') }}" class="logo-link">
-                        <img src="{{ asset($t['logo']) }}" alt="{{ $t['nome'] }}">
+                        <img src="{{ asset($t['logo']) }}" width="80" alt="{{ $t['nome'] }}">
                         <span class="logo-text">{{ $t['nome'] }}</span>
                     </a>
                 </h1>
             </div>
-            <div class="clearfix"></div>
-        </div>
-    </div>
 
-    <div class="header-bottom">
-        <div class="container">
-            <nav class="navbar navbar-expand-lg navbar-default" role="navigation">
-                <button class="navbar-toggler" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#navMenu"
-                    aria-controls="navMenu" aria-expanded="false" aria-label="Menu">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+            <div class="header-bottom">
+                <nav class="navbar navbar-expand-lg navbar-default">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggler"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#navMenu"
+                                    aria-controls="navMenu"
+                                    aria-expanded="false">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
 
-                <div class="collapse navbar-collapse" id="navMenu">
-                    <ul class="navbar-nav menu--francisco">
-                        @foreach(config('tenant.menu', []) as $item)
-                        @if($item['ativo'])
+                        <div class="collapse navbar-collapse" id="navMenu">
+                            <nav id="menu" class="menu menu--francisco">
+                                <ul class="nav navbar-nav menu__list">
 
-                        @if($item['tipo'] === 'dropdown')
-                            @php
-                                $filhoAtivo = collect($item['filhos'])->contains(function ($filho) {
-                                    if ($filho['tipo'] === 'servico') {
-                                        return request()->routeIs('servico')
-                                            && (string) request()->route('slug') === (string) $filho['rota'];
-                                    }
-                                    return request()->routeIs($filho['rota']);
-                                });
-                            @endphp
-                            <li class="nav-item dropdown menu__item {{ $filhoAtivo ? 'menu__item--current' : '' }}">
-                                <a class="nav-link menu__link dropdown-toggle"
-                                   href="#" role="button"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="menu__helper">{{ $item['label'] }}</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    @foreach($item['filhos'] as $filho)
-                                    @if($filho['ativo'])
-                                    <li>
-                                        @if($filho['tipo'] === 'servico')
-                                            <a class="dropdown-item @active('servico', ['slug' => $filho['rota']])"
-                                               href="{{ route('servico', $filho['rota']) }}">
-                                                {{ $filho['label'] }}
+                                    @foreach(config('tenant.menu', []) as $item)
+                                    @if($item['ativo'])
+
+                                    @if($item['tipo'] === 'dropdown')
+                                        @php
+                                            $filhoAtivo = collect($item['filhos'])->contains(function ($filho) {
+                                                if ($filho['tipo'] === 'servico') {
+                                                    return request()->routeIs('servico')
+                                                        && (string) request()->route('slug') === (string) $filho['rota'];
+                                                }
+                                                return request()->routeIs($filho['rota']);
+                                            });
+                                        @endphp
+                                        <li class="menu__item dropdown {{ $filhoAtivo ? 'menu__item--current' : '' }}">
+                                            <a href="#" class="menu__link dropdown-toggle"
+                                               data-bs-toggle="dropdown" aria-expanded="false">
+                                                <span class="menu__helper">{{ $item['label'] }}</span>
                                             </a>
-                                        @else
-                                            <a class="dropdown-item @active($filho['rota'])"
-                                               href="{{ route($filho['rota']) }}">
-                                                {{ $filho['label'] }}
-                                            </a>
-                                        @endif
-                                    </li>
+                                            <ul class="dropdown-menu">
+                                                @foreach($item['filhos'] as $filho)
+                                                @if($filho['ativo'])
+                                                <li>
+                                                    @if($filho['tipo'] === 'servico')
+                                                        <a href="{{ route('servico', $filho['rota']) }}"
+                                                           class="@active('servico', ['slug' => $filho['rota']])">
+                                                            {{ $filho['label'] }}
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route($filho['rota']) }}"
+                                                           class="@active($filho['rota'])">
+                                                            {{ $filho['label'] }}
+                                                        </a>
+                                                    @endif
+                                                </li>
+                                                @endif
+                                                @endforeach
+                                            </ul>
+                                        </li>
+
+                                    @else
+                                        @php
+                                            $itemAtivo = $item['tipo'] === 'servico'
+                                                ? (request()->routeIs('servico') && (string) request()->route('slug') === (string) $item['rota'])
+                                                : request()->routeIs($item['rota']);
+                                        @endphp
+                                        <li class="menu__item {{ $itemAtivo ? 'menu__item--current' : '' }}">
+                                            @if($item['tipo'] === 'servico')
+                                                <a href="{{ route('servico', $item['rota']) }}" class="menu__link">
+                                                    <span class="menu__helper">{{ $item['label'] }}</span>
+                                                </a>
+                                            @else
+                                                <a href="{{ route($item['rota']) }}" class="menu__link">
+                                                    <span class="menu__helper">{{ $item['label'] }}</span>
+                                                </a>
+                                            @endif
+                                        </li>
+                                    @endif
+
                                     @endif
                                     @endforeach
+
                                 </ul>
-                            </li>
+                            </nav>
+                        </div>
+                    </div>
+                </nav>
+            </div>
 
-                        @else
-                            @php
-                                if ($item['tipo'] === 'servico') {
-                                    $itemAtivo = request()->routeIs('servico')
-                                        && (string) request()->route('slug') === (string) $item['rota'];
-                                } else {
-                                    $itemAtivo = request()->routeIs($item['rota']);
-                                }
-                            @endphp
-                            <li class="nav-item menu__item {{ $itemAtivo ? 'menu__item--current' : '' }}">
-                                @if($item['tipo'] === 'servico')
-                                    <a class="nav-link menu__link" href="{{ route('servico', $item['rota']) }}">
-                                        <span class="menu__helper">{{ $item['label'] }}</span>
-                                    </a>
-                                @else
-                                    <a class="nav-link menu__link" href="{{ route($item['rota']) }}">
-                                        <span class="menu__helper">{{ $item['label'] }}</span>
-                                    </a>
-                                @endif
-                            </li>
-                        @endif
-
-                        @endif
-                        @endforeach
-                    </ul>
-                </div>
-            </nav>
+            <div class="clearfix"></div>
         </div>
     </div>
 </div>
