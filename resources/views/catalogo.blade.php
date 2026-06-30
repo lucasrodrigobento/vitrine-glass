@@ -5,33 +5,44 @@
 
 @section('content')
 
-<div class="page-banner banner-servicos">
+<div class="banner1 banner-servicos">
+    <div class="dot"></div>
     <div class="container">
-        <h1>Galeria de Serviços</h1>
+        <h3>
+            <a href="{{ route('home') }}">Início</a> /
+            <span>Serviços</span>
+        </h3>
     </div>
 </div>
 
-<section class="py-5">
+<div class="gallery-w3l">
     <div class="container">
-        @if($images->count())
-        <div class="row g-3">
-            @foreach($images as $img)
-            <div class="col-6 col-md-4 col-lg-3">
-                <div class="gallery-item">
-                    <img src="{{ asset('storage/' . $img->path) }}"
-                         class="img-fluid rounded" alt="{{ $img->titulo ?: $t['nome'] }}">
-                    @if($img->titulo)
-                    <div class="gallery-overlay">{{ $img->titulo }}</div>
-                    @endif
+        <h2 class="tittle">Galeria de Serviços</h2>
+        <div class="gallery-grids row">
+            @if($images->count())
+                @foreach($images as $img)
+                <div class="col-md-6 col-sm-6 gallery-grids-left">
+                    <div class="gallery-grid">
+                        <img src="{{ asset('storage/' . $img->path) }}"
+                             class="img-fluid"
+                             alt="{{ $img->titulo ?: $t['nome'] }}"
+                             loading="lazy">
+                        @if($img->titulo)
+                        <p class="text-center mt-1">{{ $img->titulo }}</p>
+                        @endif
+                    </div>
                 </div>
-            </div>
-            @endforeach
+                @endforeach
+            @else
+                <div class="col-12 text-center py-5">
+                    <p>Nenhuma imagem cadastrada ainda.</p>
+                </div>
+            @endif
         </div>
-        <div class="mt-4">{{ $images->links() }}</div>
-        @else
-        <p class="text-center text-muted py-5">Nenhuma imagem cadastrada ainda.</p>
+        @if($images->count())
+        <div class="text-center mt-4">{{ $images->links() }}</div>
         @endif
     </div>
-</section>
+</div>
 
 @endsection

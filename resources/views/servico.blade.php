@@ -5,38 +5,51 @@
 
 @section('content')
 
-<div class="page-banner banner-servicos">
+<div class="banner1 banner-servicos">
+    <div class="dot"></div>
     <div class="container">
-        <h1>{{ $servico['titulo'] }}</h1>
+        <h3>
+            <a href="{{ route('home') }}">Início</a> /
+            <span>{{ $servico['titulo'] }}</span>
+        </h3>
     </div>
 </div>
 
-<section class="py-5">
+<div class="gallery-w3l">
     <div class="container">
-        @if($images->count())
-        <div class="row g-3">
-            @foreach($images as $img)
-            <div class="col-6 col-md-4 col-lg-3">
-                <div class="gallery-item">
-                    <img src="{{ asset('storage/' . $img->path) }}"
-                         class="img-fluid rounded" alt="{{ $img->titulo ?: $servico['titulo'] }}">
-                    @if($img->titulo)
-                    <div class="gallery-overlay">{{ $img->titulo }}</div>
-                    @endif
+        <h2 class="tittle">{{ $servico['titulo'] }}</h2>
+        <div class="gallery-grids row">
+            @if($images->count())
+                @foreach($images as $img)
+                <div class="col-md-6 col-sm-6 gallery-grids-left">
+                    <div class="gallery-grid">
+                        <img src="{{ asset('storage/' . $img->path) }}"
+                             class="img-fluid"
+                             alt="{{ $img->titulo ?: $servico['titulo'] }}"
+                             loading="lazy">
+                        @if($img->titulo)
+                        <p class="text-center mt-1">{{ $img->titulo }}</p>
+                        @endif
+                    </div>
                 </div>
-            </div>
-            @endforeach
+                @endforeach
+            @else
+                <div class="col-12 text-center py-5">
+                    <p>Conteúdo em breve.</p>
+                </div>
+            @endif
         </div>
-        @else
-        <p class="text-center text-muted py-5">Conteúdo em breve.</p>
-        @endif
 
         <div class="text-center mt-5">
-            <a href="{{ route('contato') }}" class="btn btn-primary btn-lg">
-                Solicitar Orçamento
+            <a href="https://api.whatsapp.com/send?phone={{ $t['whatsapp'] }}"
+               class="btn btn-primary btn-lg me-2" target="_blank" rel="noopener">
+                <i class="fa-brands fa-whatsapp me-1"></i> WhatsApp
+            </a>
+            <a href="{{ route('contato') }}" class="btn btn-outline-primary btn-lg">
+                Formulário de Contato
             </a>
         </div>
     </div>
-</section>
+</div>
 
 @endsection
