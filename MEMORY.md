@@ -4,7 +4,7 @@
 
 **Referência visual:** `projects/lider-vidros/` (PHP puro legado — não é base de código)
 
-**Stack:** Laravel 13 · Filament 5 · PHP 8.3 · Bootstrap 5 · SQLite (local) / MySQL (prod)
+**Stack:** Laravel 11 · Filament v3 · PHP 8.4 · SQLite (local/Docker) / MySQL (prod)
 
 ---
 
@@ -82,5 +82,17 @@ Documentação completa: `CLAUDE.md` (no projeto)
 - Imagens em `storage/app/public/` → `php artisan storage:link` obrigatório
 - Menu gerado automaticamente a partir dos serviços ativos
 - `TAPROOT_PROJECTS_PATH` no `.env` define onde o seeder busca imagens source
+
+## Sessões
+
+| Data | O que foi feito | Score |
+|---|---|---|
+| 2026-07-01 | Arquitetura multi-tenant completa (Tenant, services, slides, features, gallery). Docker + entrypoint.sh. TenantSeeder importando taproot. Fix bug SQLite `->after('id')` → remove `->after()`. Primeira avaliação formal: **7.4/10** | 7.4 |
+
+## Bugs conhecidos
+
+| Bug | Causa | Fix |
+|---|---|---|
+| Container restart loop em "Rodando migrations..." | `->after('id')` em Schema::table() SQLite força table rebuild silencioso → exit code 1 | Removido `->after()` da migration 5. Volume reset: `docker compose down -v && docker compose up -d --build` |
 
 *Atualizado: 2026-07-01*
