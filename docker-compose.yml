@@ -1,0 +1,43 @@
+name: vitrine-glass
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vitrine-glass
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    volumes:
+      # código-fonte montado para hot-reload (sem rebuild ao editar PHP/Blade)
+      - .:/app
+      # preserva vendor e node_modules gerados dentro do container
+      - vitrine_vendor:/app/vendor
+      - vitrine_node:/app/node_modules
+      # persiste banco SQLite e storage entre reinicios
+      - vitrine_db:/app/database
+      - vitrine_storage:/app/storage/app/public
+      # acesso somente-leitura ao taproot para o seeder copiar imagens dos clientes
+      - /mnt/c/taproot/projects:/taproot/projects:ro
+    environment:
+      APP_ENV:   "${APP_ENV:-local}"
+      APP_DEBUG: "${APP_DEBUG:-true}"
+      APP_URL:   "${APP_URL:-http://localhost:8080}"
+      TENANT_SLUG: "${TENANT_SLUG:-lider-vidros}"
+      TAPROOT_PROJECTS_PATH: "/taproot/projects"
+    env_file:
+      - path: .env
+        required: false   # container sobe mesmo sem .env; entrypoint cria um
+    healthcheck:
+      test: ["CMD", "php", "artisan", "up"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  vitrine_vendor:
+  vitrine_node:
+  vitrine_db:
+  vitrine_storage:

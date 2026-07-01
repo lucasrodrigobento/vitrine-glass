@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Tenant;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class ResolveTenant
@@ -11,34 +13,39 @@ class ResolveTenant
     public function handle(Request $request, Closure $next): Response
     {
         $host = strtolower($request->getHost());
-        $slug = $this->resolveSlug($host);
 
-        $configFile = config_path("tenants/{$slug}.php");
+        $tenant = $this->resolveTenant($host);
 
-        if (!file_exists($configFile)) {
-            abort(404, "Tenant não encontrado: {$slug}");
+        if (!$tenant) {
+            abort(404, "Tenant não encontrado para: {$host}");
         }
 
-        config(['tenant' => require $configFile]);
+        app()->instance('tenant', $tenant);
+        config(['tenant' => $tenant->toConfigArray()]);
 
         return $next($request);
     }
 
-    private function resolveSlug(string $host): string
+    private function resolveTenant(string $host): ?Tenant
     {
-        $map = [];
-
-        foreach (glob(config_path('tenants/*.php')) as $file) {
-            $cfg = require $file;
-            $map[$cfg['dominio']]              = $cfg['slug'];
-            $map[$cfg['slug'] . '.test']       = $cfg['slug'];
-            $map[$cfg['slug'] . '.localhost']  = $cfg['slug'];
+        // Em desenvolvimento local, usa variável de ambiente
+        if ($this->isLocalhost($host)) {
+            $slug = env('TENANT_SLUG', 'lider-vidros');
+            return Cache::remember("tenant:slug:{$slug}", 300, fn() =>
+                Tenant::with(['services', 'features'])->where('slug', $slug)->where('ativo', true)->first()
+            );
         }
 
-        if (in_array($host, ['localhost', '127.0.0.1']) || str_contains($host, ':')) {
-            return env('TENANT_SLUG', 'box-vidros');
-        }
+        return Cache::remember("tenant:{$host}", 300, fn() =>
+            Tenant::with(['services', 'features'])->where('dominio', $host)->where('ativo', true)->first()
+        );
+    }
 
-        return $map[$host] ?? env('TENANT_SLUG', 'box-vidros');
+    private function isLocalhost(string $host): bool
+    {
+        return in_array($host, ['localhost', '127.0.0.1'])
+            || str_contains($host, ':')
+            || str_ends_with($host, '.test')
+            || str_ends_with($host, '.localhost');
     }
 }

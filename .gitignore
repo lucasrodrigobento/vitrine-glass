@@ -26,3 +26,11 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 /storage/app/public/
+
+/bootstrap/cache/
+
+# Docker
+docker-compose.override.yml
+
+# Pacotes de build/FTP
+/dist/

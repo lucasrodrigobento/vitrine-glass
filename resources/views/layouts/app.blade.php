@@ -1,4 +1,4 @@
-@php $t = config('tenant'); @endphp
+@php use Illuminate\Support\Facades\Storage; $t = config('tenant'); @endphp
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

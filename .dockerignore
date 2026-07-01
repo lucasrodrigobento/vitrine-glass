@@ -1,0 +1,36 @@
+# dependências — instaladas dentro do container
+vendor/
+node_modules/
+
+# assets compilados — rebuilt no container
+public/build/
+public/hot/
+
+# banco local — container tem volume próprio
+database/database.sqlite
+database/*.sqlite
+
+# storage local
+storage/app/public/
+
+# ambiente local
+.env
+.env.local
+.env.*.local
+
+# git e ferramentas dev
+.git/
+.gitignore
+.github/
+
+# cache IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# logs
+storage/logs/*.log
+
+# taproot/docs (não sobem para o container)
+MEMORY.md

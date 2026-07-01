@@ -2,13 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GalleryImage;
+use App\Models\Tenant;
 use Illuminate\Http\Request;
 
 class SiteController extends Controller
 {
+    private function tenant(): Tenant
+    {
+        return app('tenant');
+    }
+
     public function home()
     {
-        return view('home');
+        $slides = $this->tenant()
+            ->slides()
+            ->where('ativo', true)
+            ->orderBy('ordem')
+            ->get();
+
+        return view('home', compact('slides'));
     }
 
     public function sobre()
@@ -18,8 +31,7 @@ class SiteController extends Controller
 
     public function catalogo()
     {
-        $t = config('tenant');
-        $images = \App\Models\GalleryImage::where('tenant_slug', $t['slug'])
+        $images = GalleryImage::where('tenant_id', $this->tenant()->id)
             ->where('ativo', true)
             ->orderBy('ordem')
             ->paginate(12);
@@ -44,7 +56,7 @@ class SiteController extends Controller
 
         \Illuminate\Support\Facades\Mail::raw(
             "Nome: {$request->nome}\nEmail: {$request->email}\n\n{$request->mensagem}",
-            fn ($m) => $m->to($t['email'])->subject("Contato via site — {$t['nome']}")
+            fn($m) => $m->to($t['email'])->subject("Contato via site — {$t['nome']}")
         );
 
         return back()->with('sucesso', 'Mensagem enviada com sucesso!');
@@ -60,7 +72,7 @@ class SiteController extends Controller
             abort(404);
         }
 
-        $images = \App\Models\GalleryImage::where('tenant_slug', $t['slug'])
+        $images = GalleryImage::where('tenant_id', $this->tenant()->id)
             ->where('categoria', $slug)
             ->where('ativo', true)
             ->orderBy('ordem')
