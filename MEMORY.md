@@ -83,16 +83,47 @@ Documentação completa: `CLAUDE.md` (no projeto)
 - Menu gerado automaticamente a partir dos serviços ativos
 - `TAPROOT_PROJECTS_PATH` no `.env` define onde o seeder busca imagens source
 
+## Como subir — regras críticas
+
+```bash
+docker compose up -d           # SEMPRE usar isso (recria container, recarrega env vars)
+docker compose up -d --build   # rebuild de imagem (após mudar Dockerfile ou deps)
+docker compose down -v         # reset total (apaga volumes — perde banco e storage!)
+```
+
+> **NUNCA usar `docker compose restart`** para mudanças de `.env`.  
+> O `restart` mantém as variáveis de ambiente da criação original — mudanças no `.env` só são aplicadas com `docker compose up`.
+
+## Variáveis de ambiente — precedência
+
+O `environment:` block do docker-compose.yml **sempre sobrepõe** o `env_file:`.  
+Por isso `DB_CONNECTION: sqlite` está fixo no compose — não depende do `.env` local.
+
+| Var | Onde definida | Valor |
+|---|---|---|
+| `DB_CONNECTION` | `docker-compose.yml` environment block (fixo) | `sqlite` |
+| `TENANT_SLUG` | `.env` → substitui `${TENANT_SLUG:-lider-vidros}` | `lider-vidros` (default) |
+| `TAPROOT_PROJECTS_PATH` | docker-compose.yml (fixo) | `/taproot/projects` |
+
+## Estado atual (2026-07-02)
+
+- Container rodando: ✅ http://localhost:8080
+- Todas as 9 migrations: ✅
+- Seeder: ✅ lider-vidros + box-vidros importados do taproot
+- Admin Filament: http://localhost:8080/admin (criar user: `docker compose exec app php artisan make:filament-user`)
+
 ## Sessões
 
 | Data | O que foi feito | Score |
 |---|---|---|
 | 2026-07-01 | Arquitetura multi-tenant completa (Tenant, services, slides, features, gallery). Docker + entrypoint.sh. TenantSeeder importando taproot. Fix bug SQLite `->after('id')` → remove `->after()`. Primeira avaliação formal: **7.4/10** | 7.4 |
+| 2026-07-02 | Fix DB_CONNECTION: `.env` tinha `mysql`, `docker compose restart` mantinha env antiga → adicionado `DB_CONNECTION: sqlite` fixo no docker-compose.yml `environment:` block. Container rodando com sucesso. | — |
 
 ## Bugs conhecidos
 
-| Bug | Causa | Fix |
-|---|---|---|
-| Container restart loop em "Rodando migrations..." | `->after('id')` em Schema::table() SQLite força table rebuild silencioso → exit code 1 | Removido `->after()` da migration 5. Volume reset: `docker compose down -v && docker compose up -d --build` |
+| # | Bug | Causa raiz | Fix aplicado |
+|---|---|---|---|
+| BUG-01 | Container restart loop em "Rodando migrations..." | `->after('id')` em `Schema::table()` SQLite → full table rebuild silencioso → exit 1 | Removido `->after()` da migration 5. Reset volume: `docker compose down -v && docker compose up -d --build` |
+| BUG-02 | Migration tentando conectar MySQL mesmo com `.env` sqlite | `docker compose restart` não recarrega `env_file` — mantém vars da criação. Laravel lê OS env vars com precedência sobre `.env` | Adicionado `DB_CONNECTION: sqlite` fixo no `environment:` block do docker-compose.yml |
 
-*Atualizado: 2026-07-01*
+*Atualizado: 2026-07-02*
