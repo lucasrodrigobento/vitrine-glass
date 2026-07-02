@@ -364,7 +364,8 @@ class EmpresaResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->after(function ($record) {
-                        Cache::forget("tenant:{$record->dominio}");
+                        Cache::forget("tenant:id:slug:{$record->slug}");
+                        Cache::forget("tenant:id:domain:{$record->dominio}");
                         app(GoogleDriveService::class)->clearCache($record->slug);
                     }),
             ])

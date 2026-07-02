@@ -28,17 +28,18 @@ class ResolveTenant
 
     private function resolveTenant(string $host): ?Tenant
     {
-        // Em desenvolvimento local, usa variável de ambiente
         if ($this->isLocalhost($host)) {
             $slug = env('TENANT_SLUG', 'lider-vidros');
-            return Cache::remember("tenant:slug:{$slug}", 300, fn() =>
-                Tenant::with(['services', 'features'])->where('slug', $slug)->where('ativo', true)->first()
+            $id   = Cache::remember("tenant:id:slug:{$slug}", 300, fn () =>
+                Tenant::where('slug', $slug)->where('ativo', true)->value('id')
             );
+            return $id ? Tenant::with(['services', 'features'])->find($id) : null;
         }
 
-        return Cache::remember("tenant:{$host}", 300, fn() =>
-            Tenant::with(['services', 'features'])->where('dominio', $host)->where('ativo', true)->first()
+        $id = Cache::remember("tenant:id:domain:{$host}", 300, fn () =>
+            Tenant::where('dominio', $host)->where('ativo', true)->value('id')
         );
+        return $id ? Tenant::with(['services', 'features'])->find($id) : null;
     }
 
     private function isLocalhost(string $host): bool
