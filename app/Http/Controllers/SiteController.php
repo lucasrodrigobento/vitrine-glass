@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\GalleryImage;
 use App\Models\Tenant;
+use App\Services\GoogleDriveService;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class SiteController extends Controller
 {
@@ -29,14 +31,39 @@ class SiteController extends Controller
         return view('sobre');
     }
 
-    public function catalogo()
+    public function catalogo(Request $request, GoogleDriveService $drive)
     {
-        $images = GalleryImage::where('tenant_id', $this->tenant()->id)
+        $tenant = $this->tenant();
+
+        if ($tenant->google_drive_api_key && $tenant->google_drive_folder_id) {
+            $allFiles = $drive->catalogImages(
+                $tenant->slug,
+                $tenant->google_drive_api_key,
+                $tenant->google_drive_folder_id
+            );
+
+            $perPage = 12;
+            $page    = max(1, (int) $request->get('page', 1));
+            $total   = count($allFiles);
+            $items   = array_slice($allFiles, ($page - 1) * $perPage, $perPage);
+
+            $images = new LengthAwarePaginator(
+                $items,
+                $total,
+                $perPage,
+                $page,
+                ['path' => route('catalogo')]
+            );
+
+            return view('catalogo', ['images' => $images, 'mode' => 'drive', 'drive' => $drive]);
+        }
+
+        $images = GalleryImage::where('tenant_id', $tenant->id)
             ->where('ativo', true)
             ->orderBy('ordem')
             ->paginate(12);
 
-        return view('catalogo', compact('images'));
+        return view('catalogo', ['images' => $images, 'mode' => 'local']);
     }
 
     public function contato()

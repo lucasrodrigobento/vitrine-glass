@@ -9,6 +9,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use App\Services\GoogleDriveService;
 use Illuminate\Support\Facades\Cache;
 
 class EmpresaResource extends Resource
@@ -307,6 +308,27 @@ class EmpresaResource extends Resource
                                 ]),
                         ])->columns(1),
 
+                    Forms\Components\Tabs\Tab::make('Catálogo')
+                        ->icon('heroicon-o-photo')
+                        ->schema([
+                            Forms\Components\Section::make('Google Drive — Listagem Dinâmica de Imagens')
+                                ->description('Configure para listar imagens diretamente de uma pasta pública do Google Drive. Se não configurado, o catálogo exibe as imagens importadas localmente.')
+                                ->schema([
+                                    Forms\Components\TextInput::make('google_drive_api_key')
+                                        ->label('API Key do Google Drive')
+                                        ->maxLength(200)
+                                        ->password()
+                                        ->revealable()
+                                        ->columnSpanFull()
+                                        ->helperText('Chave de API do Google Cloud com Drive API v3 habilitada (somente leitura de arquivos públicos)'),
+                                    Forms\Components\TextInput::make('google_drive_folder_id')
+                                        ->label('ID da Pasta do Google Drive')
+                                        ->maxLength(100)
+                                        ->columnSpanFull()
+                                        ->helperText('ID da pasta pública. Exemplo: 1qYHQqfFC0F8sdQzv3xVxlBax8ZzLR2rK — aparece na URL ao abrir a pasta no Drive'),
+                                ])->columns(1),
+                        ])->columns(1),
+
                 ]),
         ]);
     }
@@ -341,7 +363,10 @@ class EmpresaResource extends Resource
             ->defaultSort('nome')
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->after(fn($record) => Cache::forget("tenant:{$record->dominio}")),
+                    ->after(function ($record) {
+                        Cache::forget("tenant:{$record->dominio}");
+                        app(GoogleDriveService::class)->clearCache($record->slug);
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

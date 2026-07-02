@@ -45,8 +45,11 @@ if grep -qE "^APP_KEY=$|^APP_KEY=base64:$" .env; then
 fi
 
 # ── 3. SQLite ─────────────────────────────────────────────────────
-SQLITE_FILE="database/database.sqlite"
-if grep -qE "^DB_CONNECTION=sqlite" .env && [[ ! -f "$SQLITE_FILE" ]]; then
+# Banco fica em storage/db/ (volume isolado) para não sobrepor database/migrations/
+SQLITE_DIR="storage/db"
+SQLITE_FILE="${SQLITE_DIR}/database.sqlite"
+mkdir -p "$SQLITE_DIR"
+if [[ ! -f "$SQLITE_FILE" ]]; then
     touch "$SQLITE_FILE"
     info "SQLite criado: $SQLITE_FILE"
 fi
@@ -66,7 +69,7 @@ fi
 # Verifica diretamente no SQLite ou via PHP inline
 TENANT_COUNT=$(php -r "
     try {
-        \$pdo = new PDO('sqlite:' . realpath('database/database.sqlite'));
+        \$pdo = new PDO('sqlite:' . realpath('storage/db/database.sqlite'));
         echo \$pdo->query(\"SELECT COUNT(*) FROM tenants\")->fetchColumn();
     } catch (Exception \$e) { echo 0; }
 " 2>/dev/null || echo "0")

@@ -15,8 +15,8 @@ services:
       # preserva vendor e node_modules gerados dentro do container
       - vitrine_vendor:/app/vendor
       - vitrine_node:/app/node_modules
-      # persiste banco SQLite e storage entre reinicios
-      - vitrine_db:/app/database
+      # persiste só o arquivo SQLite (não sobrepõe database/migrations do bind mount)
+      - vitrine_db:/app/storage/db
       - vitrine_storage:/app/storage/app/public
       # acesso somente-leitura ao taproot para o seeder copiar imagens dos clientes
       - /mnt/c/taproot/projects:/taproot/projects:ro
@@ -26,7 +26,8 @@ services:
       APP_URL:   "${APP_URL:-http://localhost:8080}"
       TENANT_SLUG: "${TENANT_SLUG:-lider-vidros}"
       TAPROOT_PROJECTS_PATH: "/taproot/projects"
-      DB_CONNECTION: "sqlite"   # sempre SQLite em Docker; MySQL só via env_file em prod
+      DB_CONNECTION: "sqlite"                        # sempre SQLite em Docker
+      DB_DATABASE:   "/app/storage/db/database.sqlite"  # fora de database/ para não bloquear migrations
     env_file:
       - path: .env
         required: false   # container sobe mesmo sem .env; entrypoint cria um

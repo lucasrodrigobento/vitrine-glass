@@ -26,6 +26,7 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 /storage/app/public/
+/storage/db/
 
 /bootstrap/cache/
 

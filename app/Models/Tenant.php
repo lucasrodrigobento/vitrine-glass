@@ -15,6 +15,7 @@ class Tenant extends Model
         'whatsapp', 'whatsapp_exibir', 'email',
         'instagram', 'facebook', 'endereco', 'areas_atendidas',
         'google_ads_id', 'google_maps_embed', 'schema_type',
+        'google_drive_api_key', 'google_drive_folder_id',
         'seo_title', 'seo_description', 'seo_keywords',
         'hero_titulo', 'hero_subtitulo',
         'sobre_titulo', 'sobre_descricao', 'sobre_missao', 'sobre_visao', 'sobre_valores',
