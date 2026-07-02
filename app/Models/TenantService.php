@@ -7,9 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TenantService extends Model
 {
-    protected $fillable = ['tenant_id', 'slug', 'titulo', 'descricao', 'ordem', 'ativo'];
+    protected $fillable = ['tenant_id', 'slug', 'titulo', 'descricao', 'ordem', 'ativo', 'mostrar_menu'];
 
-    protected $casts = ['ativo' => 'boolean'];
+    protected $casts = [
+        'ativo'        => 'boolean',
+        'mostrar_menu' => 'boolean',
+    ];
 
     public function tenant(): BelongsTo
     {

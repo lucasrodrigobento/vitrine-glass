@@ -72,6 +72,17 @@ class EmpresaResource extends Resource
                                 ->required()
                                 ->default('#9e2016')
                                 ->helperText('Cor complementar — gradientes, hovers'),
+                            Forms\Components\Select::make('logo_header')
+                                ->label('Header: exibir')
+                                ->options([
+                                    'logo'  => 'Somente a logo (imagem)',
+                                    'texto' => 'Somente o nome da empresa (texto)',
+                                    'ambos' => 'Logo + nome da empresa',
+                                ])
+                                ->default('logo')
+                                ->required()
+                                ->columnSpanFull()
+                                ->helperText('Define o que aparece no canto esquerdo do header'),
                             Forms\Components\FileUpload::make('logo')
                                 ->label('Logo')
                                 ->image()
@@ -300,12 +311,72 @@ class EmpresaResource extends Resource
                                             Forms\Components\Toggle::make('ativo')
                                                 ->label('Ativo')
                                                 ->default(true),
+                                            Forms\Components\Toggle::make('mostrar_menu')
+                                                ->label('Exibir no menu de navegação')
+                                                ->default(true)
+                                                ->helperText('Desmarcado: serviço existe como página mas não aparece no menu'),
                                         ])->columns(2)
                                         ->orderColumn('ordem')
                                         ->addActionLabel('+ Adicionar Serviço')
                                         ->collapsible()
                                         ->itemLabel(fn(array $state) => $state['titulo'] ?? 'Novo Serviço'),
                                 ]),
+
+                            Forms\Components\Section::make('Configuração do Menu de Navegação')
+                                ->description('Personaliza os labels e o comportamento do menu de Serviços e do Catálogo')
+                                ->schema([
+                                    Forms\Components\TextInput::make('menu_servicos_label')
+                                        ->label('Label do menu "Serviços"')
+                                        ->default('Serviços')
+                                        ->maxLength(50)
+                                        ->helperText('Texto que aparece no menu de navegação para o dropdown de serviços'),
+                                    Forms\Components\Toggle::make('menu_catalogo_visivel')
+                                        ->label('Exibir link de Catálogo')
+                                        ->default(true)
+                                        ->helperText('Ativa ou oculta o link para a página de Catálogo no menu'),
+                                    Forms\Components\TextInput::make('menu_catalogo_label')
+                                        ->label('Label do link "Catálogo"')
+                                        ->default('Catálogo de Serviços')
+                                        ->maxLength(50)
+                                        ->helperText('Texto exibido para o link do catálogo'),
+                                    Forms\Components\Select::make('menu_catalogo_posicao')
+                                        ->label('Posição do Catálogo no menu')
+                                        ->options([
+                                            'dropdown' => 'Dentro do dropdown de Serviços',
+                                            'topo'     => 'Item separado no menu principal',
+                                        ])
+                                        ->default('dropdown')
+                                        ->helperText('Define se o Catálogo aparece como submenu de Serviços ou como item direto no menu'),
+                                ])->columns(2),
+                        ])->columns(1),
+
+                    Forms\Components\Tabs\Tab::make('Tipografia')
+                        ->icon('heroicon-o-tag')
+                        ->schema([
+                            Forms\Components\Section::make('Fontes do Site')
+                                ->description('Fontes carregadas do Google Fonts. Altere para personalizar a tipografia do tenant.')
+                                ->schema([
+                                    Forms\Components\TextInput::make('font_body')
+                                        ->label('Fonte do Corpo (body)')
+                                        ->default('Open Sans')
+                                        ->maxLength(100)
+                                        ->helperText('Ex: Open Sans, Lato, Roboto, Poppins — nome exato do Google Fonts'),
+                                    Forms\Components\TextInput::make('font_heading')
+                                        ->label('Fonte de Títulos (h1–h6 e nav)')
+                                        ->default('Righteous')
+                                        ->maxLength(100)
+                                        ->helperText('Ex: Righteous, Montserrat, Oswald, Playfair Display'),
+                                    Forms\Components\TextInput::make('font_accent')
+                                        ->label('Fonte de Destaque (labels de galeria)')
+                                        ->default('Josefin Sans')
+                                        ->maxLength(100)
+                                        ->helperText('Ex: Josefin Sans, Dancing Script, Raleway — usada nos labels flutuantes da galeria'),
+                                    Forms\Components\Textarea::make('font_google_url')
+                                        ->label('URL do Google Fonts (gerada automaticamente ou personalizada)')
+                                        ->rows(3)
+                                        ->columnSpanFull()
+                                        ->helperText('Cole aqui a URL do Google Fonts com todas as fontes do site. Acesse fonts.google.com, selecione as fontes e copie o link href.'),
+                                ])->columns(2),
                         ])->columns(1),
 
                     Forms\Components\Tabs\Tab::make('Catálogo')

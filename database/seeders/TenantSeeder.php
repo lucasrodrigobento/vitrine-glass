@@ -64,6 +64,10 @@ class TenantSeeder extends Seeder
                 'google_maps_embed'     => null,
                 'google_drive_api_key'  => 'AIzaSyA1BlRpL0Hq-l_4Ifc2HHyzteUp9QmN4Mc',
                 'google_drive_folder_id'=> '1qYHQqfFC0F8sdQzv3xVxlBax8ZzLR2rK',
+                'font_body'       => 'Open Sans',
+                'font_heading'    => 'Righteous',
+                'font_accent'     => 'Josefin Sans',
+                'font_google_url' => 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Righteous&family=Josefin+Sans&display=swap',
                 'schema_type'     => 'LocalBusiness',
                 'seo_title'       => 'Vidraçaria em Goiânia | Box Banheiro, Espelhos Sob Medida, Esquadrias e Portas de Vidro',
                 'seo_description' => 'Vidraçaria em Goiânia especializada em box banheiro Goiânia, espelhos sob medida, portas de vidro, esquadrias de alumínio e fechamento de sacada Goiânia. Atendimento em Aparecida de Goiânia, Senador Canedo, Anápolis e Goianira.',
@@ -75,17 +79,22 @@ class TenantSeeder extends Seeder
                 'sobre_missao'    => 'Oferecer atendimento e produtos de qualidade aos nossos clientes.',
                 'sobre_visao'     => 'Ser referência no segmento de VIDRAÇARIA em Goiânia e região.',
                 'sobre_valores'   => 'Seriedade, transparência e, sobretudo, respeito.',
+                'logo_header'              => 'logo',
+                'menu_servicos_label'      => 'Serviços',
+                'menu_catalogo_visivel'    => true,
+                'menu_catalogo_label'      => 'Catálogo de Serviços',
+                'menu_catalogo_posicao'    => 'dropdown',
                 'logo'            => $this->copyAsset("{$source}/images/logo.png", 'tenants/logos/lider-vidros.png'),
                 'favicon'         => $this->copyAsset("{$source}/images/favicon.ico", 'tenants/favicons/lider-vidros.ico'),
                 'og_image'        => $this->copyAsset("{$source}/images/thumbnail-preview-link-whatsapp.jpeg", 'tenants/og-images/lider-vidros.jpeg'),
             ]
         );
 
-        // Serviços
+        // Serviços — cortina existe como página mas não aparece no menu (igual ao site original)
         $this->seedServices($tenant, [
-            ['slug' => 'vidros',   'titulo' => 'Espelhos e Vidraçaria',  'descricao' => 'Espelhos sob medida, vidros temperados, box banheiro e portas de vidro com instalação profissional.',          'ordem' => 0],
-            ['slug' => 'aluminio', 'titulo' => 'Esquadrias e Alumínio',  'descricao' => 'Janelas, portas, fachadas e esquadrias de alumínio com vidro temperado. Projetos personalizados.',              'ordem' => 1],
-            ['slug' => 'cortina',  'titulo' => 'Cortinas e Películas',   'descricao' => 'Películas de controle solar, proteção UV, privacidade e cortinas para residências e empresas.',                  'ordem' => 2],
+            ['slug' => 'vidros',   'titulo' => 'Espelhos e Vidraçaria', 'descricao' => 'Espelhos sob medida, vidros temperados, box banheiro e portas de vidro com instalação profissional.',  'ordem' => 0],
+            ['slug' => 'aluminio', 'titulo' => 'Esquadrias e Alumínio', 'descricao' => 'Janelas, portas, fachadas e esquadrias de alumínio com vidro temperado. Projetos personalizados.',     'ordem' => 1],
+            ['slug' => 'cortina',  'titulo' => 'Cortinas e Películas',  'descricao' => 'Películas de controle solar, proteção UV, privacidade e cortinas para residências e empresas.',        'ordem' => 2, 'mostrar_menu' => false],
         ]);
 
         // Slides
@@ -156,6 +165,10 @@ class TenantSeeder extends Seeder
                 'areas_atendidas' => ['Goiânia', 'Aparecida de Goiânia', 'Senador Canedo', 'Anápolis', 'Goianira'],
                 'google_ads_id'   => null,
                 'google_maps_embed' => null,
+                'font_body'       => 'Open Sans',
+                'font_heading'    => 'Righteous',
+                'font_accent'     => 'Josefin Sans',
+                'font_google_url' => 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Righteous&family=Josefin+Sans&display=swap',
                 'schema_type'     => 'LocalBusiness',
                 'seo_title'       => 'Vidraçaria em Goiânia | Box Banheiro, Espelhos Sob Medida, Esquadrias e Portas de Vidro',
                 'seo_description' => 'Vidraçaria em Goiânia especializada em box banheiro Goiânia, espelhos sob medida, portas de vidro, esquadrias de alumínio e fechamento de sacada Goiânia. Atendimento em Aparecida de Goiânia, Senador Canedo, Anápolis e Goianira.',
@@ -167,6 +180,11 @@ class TenantSeeder extends Seeder
                 'sobre_missao'    => 'Oferecer atendimento e produtos de qualidade aos nossos clientes.',
                 'sobre_visao'     => 'Ser referência no segmento de VIDRAÇARIA em Goiânia e região.',
                 'sobre_valores'   => 'Seriedade, transparência e, sobretudo, respeito.',
+                'logo_header'              => 'logo',
+                'menu_servicos_label'      => 'Serviços',
+                'menu_catalogo_visivel'    => true,
+                'menu_catalogo_label'      => 'Catálogo de Serviços',
+                'menu_catalogo_posicao'    => 'dropdown',
                 'logo'            => $this->copyAsset("{$source}/images/logo.png",                            'tenants/logos/box-vidros.png'),
                 'favicon'         => $this->copyAsset("{$source}/images/favicon.png",                         'tenants/favicons/box-vidros.png'),
                 'og_image'        => $this->copyAsset("{$source}/images/thumbnail-preview-link-whatsapp.jpeg", 'tenants/og-images/box-vidros.jpeg'),
@@ -231,7 +249,13 @@ class TenantSeeder extends Seeder
         foreach ($services as $data) {
             TenantService::updateOrCreate(
                 ['tenant_id' => $tenant->id, 'slug' => $data['slug']],
-                ['titulo' => $data['titulo'], 'descricao' => $data['descricao'], 'ativo' => true, 'ordem' => $data['ordem']]
+                [
+                    'titulo'       => $data['titulo'],
+                    'descricao'    => $data['descricao'],
+                    'ativo'        => true,
+                    'mostrar_menu' => $data['mostrar_menu'] ?? true,
+                    'ordem'        => $data['ordem'],
+                ]
             );
         }
     }

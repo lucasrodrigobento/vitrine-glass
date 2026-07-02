@@ -11,7 +11,8 @@ class Tenant extends Model
     protected $fillable = [
         'slug', 'nome', 'dominio', 'ativo',
         'cor_primaria', 'cor_secundaria',
-        'logo', 'favicon', 'og_image',
+        'font_body', 'font_heading', 'font_accent', 'font_google_url',
+        'logo', 'favicon', 'og_image', 'logo_header',
         'whatsapp', 'whatsapp_exibir', 'email',
         'instagram', 'facebook', 'endereco', 'areas_atendidas',
         'google_ads_id', 'google_maps_embed', 'schema_type',
@@ -19,11 +20,13 @@ class Tenant extends Model
         'seo_title', 'seo_description', 'seo_keywords',
         'hero_titulo', 'hero_subtitulo',
         'sobre_titulo', 'sobre_descricao', 'sobre_missao', 'sobre_visao', 'sobre_valores',
+        'menu_servicos_label', 'menu_catalogo_visivel', 'menu_catalogo_label', 'menu_catalogo_posicao',
     ];
 
     protected $casts = [
-        'ativo'           => 'boolean',
-        'areas_atendidas' => 'array',
+        'ativo'                   => 'boolean',
+        'areas_atendidas'         => 'array',
+        'menu_catalogo_visivel'   => 'boolean',
     ];
 
     public function services(): HasMany
@@ -48,7 +51,10 @@ class Tenant extends Model
 
     public function toConfigArray(): array
     {
+        // todos ativos (para config/rotas de serviço)
         $activeServices = $this->services->where('ativo', true)->values();
+        // apenas os que aparecem no menu — null seguro: coluna ausente não exclui o serviço
+        $menuServices   = $activeServices->filter(fn($s) => ($s->mostrar_menu ?? true) !== false)->values();
         $activeFeatures = $this->features->where('ativo', true)->values();
 
         return [
@@ -58,6 +64,12 @@ class Tenant extends Model
             'dominio'         => $this->dominio,
             'cor_primaria'    => $this->cor_primaria,
             'cor_secundaria'  => $this->cor_secundaria,
+            'fonts' => [
+                'body'       => $this->font_body       ?? 'Open Sans',
+                'heading'    => $this->font_heading    ?? 'Righteous',
+                'accent'     => $this->font_accent     ?? 'Josefin Sans',
+                'google_url' => $this->font_google_url ?? 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Righteous&family=Josefin+Sans&display=swap',
+            ],
             'whatsapp'        => $this->whatsapp,
             'whatsapp_exibir' => $this->whatsapp_exibir,
             'email'           => $this->email,
@@ -66,6 +78,7 @@ class Tenant extends Model
             'google_ads_id'   => $this->google_ads_id,
             'google_maps_embed' => $this->google_maps_embed,
             'logo'            => $this->logo ? Storage::url($this->logo) : '/images/logo-default.png',
+            'logo_header'     => $this->logo_header ?? 'logo',
             'favicon'         => $this->favicon ? Storage::url($this->favicon) : '/favicon.ico',
             'og_image'        => $this->og_image ? Storage::url($this->og_image) : '/images/og-default.jpg',
             'endereco'        => $this->endereco ?? '',
@@ -101,12 +114,21 @@ class Tenant extends Model
                 'tipo'      => $f->tipo,
                 'rota'      => $f->rota,
             ])->toArray(),
-            'menu' => $this->buildMenu($activeServices),
+            'menu' => $this->buildMenu($menuServices),
         ];
     }
 
     private function buildMenu($activeServices): array
     {
+        $servicosLabel  = $this->menu_servicos_label    ?: 'Serviços';
+        $catVisivel     = $this->menu_catalogo_visivel  ?? true;
+        $catLabel       = $this->menu_catalogo_label    ?: 'Catálogo de Serviços';
+        $catPosicao     = $this->menu_catalogo_posicao  ?: 'dropdown';
+
+        $catalogoItem = $catVisivel
+            ? ['tipo' => 'pagina', 'rota' => 'catalogo', 'label' => $catLabel, 'ativo' => true]
+            : null;
+
         $menu = [
             ['tipo' => 'pagina', 'rota' => 'home',  'label' => 'Início',  'ativo' => true],
             ['tipo' => 'pagina', 'rota' => 'sobre', 'label' => 'Empresa', 'ativo' => true],
@@ -120,11 +142,20 @@ class Tenant extends Model
                 'ativo' => true,
             ])->toArray();
 
-            $filhos[] = ['tipo' => 'pagina', 'rota' => 'catalogo', 'label' => 'Catálogo', 'ativo' => true];
+            if ($catalogoItem && $catPosicao === 'dropdown') {
+                $filhos[] = $catalogoItem;
+            }
 
-            $menu[] = ['tipo' => 'dropdown', 'label' => 'Serviços', 'ativo' => true, 'filhos' => $filhos];
-        } else {
-            $menu[] = ['tipo' => 'pagina', 'rota' => 'catalogo', 'label' => 'Serviços', 'ativo' => true];
+            $menu[] = ['tipo' => 'dropdown', 'label' => $servicosLabel, 'ativo' => true, 'filhos' => $filhos];
+        } elseif ($catalogoItem && $catPosicao === 'dropdown') {
+            // sem serviços: catálogo vira item direto com o label de serviços
+            $menu[] = ['tipo' => 'pagina', 'rota' => 'catalogo', 'label' => $servicosLabel, 'ativo' => true];
+            $catalogoItem = null; // já consumido
+        }
+
+        // Catálogo como item de topo (fora do dropdown de serviços)
+        if ($catalogoItem && $catPosicao === 'topo') {
+            $menu[] = $catalogoItem;
         }
 
         $menu[] = ['tipo' => 'pagina', 'rota' => 'contato', 'label' => 'Contato', 'ativo' => true];

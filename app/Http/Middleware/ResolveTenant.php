@@ -33,13 +33,13 @@ class ResolveTenant
             $id   = Cache::remember("tenant:id:slug:{$slug}", 300, fn () =>
                 Tenant::where('slug', $slug)->where('ativo', true)->value('id')
             );
-            return $id ? Tenant::with(['services', 'features'])->find($id) : null;
+            return $id ? Tenant::with(['services', 'slides', 'features'])->find($id) : null;
         }
 
         $id = Cache::remember("tenant:id:domain:{$host}", 300, fn () =>
             Tenant::where('dominio', $host)->where('ativo', true)->value('id')
         );
-        return $id ? Tenant::with(['services', 'features'])->find($id) : null;
+        return $id ? Tenant::with(['services', 'slides', 'features'])->find($id) : null;
     }
 
     private function isLocalhost(string $host): bool

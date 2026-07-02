@@ -10,7 +10,7 @@
 
 /* ── Base ── */
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: var(--font-body, 'Open Sans'), sans-serif;
     font-size: 1rem;
 }
 
@@ -20,7 +20,7 @@ body a {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Righteous', cursive;
+    font-family: var(--font-heading, 'Righteous'), cursive;
     margin: 0;
     padding: 0;
 }
@@ -57,7 +57,7 @@ a, a:hover { text-decoration: none; color: #6f7070; }
     background: #ffffff;
     height: 40px;
     overflow: hidden;
-    border-bottom: 1px solid var(--cor-primaria);
+    border-bottom: 1px solid #ddd;
 }
 
 #topocentro {
@@ -67,7 +67,7 @@ a, a:hover { text-decoration: none; color: #6f7070; }
 }
 
 #topo li {
-    color: var(--cor-primaria);
+    color: #6f7070;
     float: left;
     list-style: none;
     font-size: 13px;
@@ -75,7 +75,7 @@ a, a:hover { text-decoration: none; color: #6f7070; }
 }
 
 #topo li a {
-    color: var(--cor-primaria);
+    color: #6f7070;
     text-decoration: none;
 }
 
@@ -83,7 +83,7 @@ a, a:hover { text-decoration: none; color: #6f7070; }
     font-size: 14px;
     vertical-align: middle;
     margin-right: 5px;
-    color: var(--cor-primaria);
+    color: #6f7070;
 }
 
 .social-icons {
@@ -113,37 +113,88 @@ a, a:hover { text-decoration: none; color: #6f7070; }
 
 /* ── Header ── */
 .header {
-    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+    background: #fff;
 }
 
 .header-top {
-    padding: 1em 0;
-    background: transparent;
+    background: #fff;
+    padding: 0;
+}
+
+/* Container do header: logo + nav lado a lado na mesma linha */
+.header-top > .container {
+    display: flex;
+    align-items: center;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    gap: 1.5em;
 }
 
 .logo {
-    float: left;
+    flex-shrink: 0;
 }
 
-.logo h1 a {
+.logo h1 {
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    font-size: inherit;
+}
+
+/* ── modo: somente imagem (padrão — igual ao lider-vidros original) ── */
+.logo--logo .logo-link {
+    display: block;
     text-decoration: none;
-    color: #fff;
-    font-size: 1.3em;
+}
+
+.logo--logo .logo-img {
+    width: 80px;
+    height: auto;
+    display: block;
+}
+
+/* ── modo: somente texto ── */
+.logo--texto .logo-link {
+    display: block;
+    text-decoration: none;
+}
+
+.logo--texto .logo-text {
+    font-family: var(--font-heading, 'Righteous'), cursive;
+    font-size: 1.6em;
+    color: var(--cor-primaria);
+    display: block;
+    line-height: 1.2;
+}
+
+/* ── modo: imagem + texto lado a lado ── */
+.logo--ambos .logo-link {
     display: inline-flex;
     align-items: center;
     gap: 0.5em;
+    text-decoration: none;
 }
 
-.logo h1 a:hover { color: #fff; opacity: 0.9; }
-
-.logo-text {
-    font-family: 'Righteous', cursive;
-    color: #fff;
+.logo--ambos .logo-img {
+    width: 80px;
+    height: auto;
+    max-height: 48px;
+    object-fit: contain;
 }
+
+.logo--ambos .logo-text {
+    font-family: var(--font-heading, 'Righteous'), cursive;
+    font-size: 1.3em;
+    color: var(--cor-primaria);
+}
+
+/* hover — todos os modos */
+.logo-link:hover { opacity: 0.85; }
 
 .header-bottom {
-    padding: 1em 0;
-    float: left;
+    flex: 1;
+    padding: 0;
+    min-width: 0;
 }
 
 /* ── Navbar ── */
@@ -162,18 +213,19 @@ a, a:hover { text-decoration: none; color: #6f7070; }
 
 .navbar-default .navbar-nav > li > a,
 .navbar-default .navbar-nav > li > .menu__link {
-    color: #fff;
+    color: var(--cor-primaria);
     font-size: 1.2em;
-    font-family: 'Righteous', cursive;
+    font-family: var(--font-heading, 'Righteous'), cursive;
 }
 
 /* Bootstrap 5 toggler estilizado como o Bootstrap 3 */
 .navbar-toggler {
-    background-color: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.4);
+    background-color: var(--cor-primaria);
+    border: 1px solid var(--cor-primaria);
     padding: 8px 10px;
     border-radius: 4px;
     cursor: pointer;
+    margin-right: 0;
 }
 
 .navbar-toggler .icon-bar {
@@ -187,7 +239,8 @@ a, a:hover { text-decoration: none; color: #6f7070; }
 
 .navbar-toggler:hover,
 .navbar-toggler:focus {
-    background-color: rgba(255,255,255,0.15);
+    background-color: var(--cor-primaria);
+    opacity: 0.9;
 }
 
 /* ── menu--francisco ── */
@@ -207,19 +260,19 @@ a, a:hover { text-decoration: none; color: #6f7070; }
     height: 3em;
     padding: 1em 0 1em !important;
     text-align: center;
-    color: #fff !important;
+    color: var(--cor-primaria) !important;
     transition: color 0.3s;
     display: block;
 }
 
 .menu--francisco .menu__link:hover,
 .menu--francisco .menu__link:focus {
-    color: rgba(255,255,255,0.85) !important;
+    color: #000001 !important;
     background: transparent !important;
 }
 
 .menu--francisco .menu__item--current .menu__link {
-    color: rgba(255,255,255,0.85) !important;
+    color: #000001 !important;
 }
 
 .menu--francisco .menu__link::before {
@@ -230,7 +283,7 @@ a, a:hover { text-decoration: none; color: #6f7070; }
     width: 100%;
     height: 3px;
     opacity: 0;
-    background: #fff;
+    background: var(--cor-primaria);
     transform: translate3d(0, -3em, 0);
     transition: transform 0s 0.3s, opacity 0.2s;
 }
@@ -282,8 +335,8 @@ a, a:hover { text-decoration: none; color: #6f7070; }
 
 .navbar-default .dropdown-menu > li > a:hover,
 .navbar-default .dropdown-menu > li > a.active {
-    background: var(--cor-primaria);
-    color: #fff;
+    background: #000001 !important;
+    color: #ffffff !important;
 }
 
 .dropdown-toggle::after { display: none; }  /* remove caret Bootstrap 5 */
@@ -536,6 +589,71 @@ h2.tittle {
 
 .gallery-grid img { width: 100%; }
 
+/* port-7 effect-3: overlay label on gallery images */
+.port-7 {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.port-7.effect-3 img {
+    transition: 0.5s;
+    position: relative;
+    width: 100%;
+    right: 0;
+}
+
+.port-7.effect-3 .gal-desc {
+    transform: perspective(600px) rotateY(-90deg);
+    transform-origin: right center 0;
+    width: 50%;
+    position: absolute;
+    left: auto;
+    right: 0;
+    top: 0;
+    padding: 51px 30px 0;
+}
+
+.port-7 .gal-desc {
+    opacity: 0;
+    transition: 0.5s;
+    color: #000;
+}
+
+.gal-desc h4 {
+    color: var(--cor-primaria);
+    font-size: 1.8em;
+    margin-bottom: 0.8em;
+}
+
+.gal-desc p {
+    line-height: 2.2em;
+    font-size: 1em;
+    color: #464646;
+}
+
+/* floating label text inside effect-3 — centralizado vertical e horizontal */
+.effect-3 p {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    margin: 0;
+    padding: 0 1em;
+    color: #fff;
+    text-align: center;
+    font-family: var(--font-accent, 'Josefin Sans'), sans-serif;
+    font-size: 2em;
+    line-height: 1.2;
+    text-shadow: 0 1px 4px rgba(0,0,0,.55);
+    pointer-events: none;
+}
+
+.pro-top { margin-top: 30px; }
+
 /* ── Footer ── */
 .footer-w3l { padding: 5em 0; }
 
@@ -620,9 +738,21 @@ h2.tittle {
 }
 
 @media (max-width: 991px) {
-    .logo { float: none; text-align: center; }
+    /* no mobile o container empilha logo acima do nav */
+    .header-top > .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5em;
+        padding-top: 0.75em;
+        padding-bottom: 0.25em;
+    }
 
-    .header-bottom { float: none; width: 100%; padding: 0.5em 0; }
+    .logo { text-align: center; }
+    .logo--logo .logo-img   { margin: 0 auto; }
+    .logo--texto .logo-link { text-align: center; }
+    .logo--ambos .logo-link { justify-content: center; }
+
+    .header-bottom { width: 100%; padding: 0; }
 
     .menu--francisco .menu__item { margin: 0 0.5em; }
 
@@ -631,18 +761,18 @@ h2.tittle {
         padding: 0.6em 0.5rem !important;
     }
 
-    /* dropdown mobile: fundo escuro sobre gradiente */
+    /* dropdown mobile: fundo branco sobre header branco */
     .navbar-default .dropdown-menu {
         border-top: none;
-        border-left: 3px solid rgba(255,255,255,0.4);
+        border-left: 3px solid var(--cor-primaria);
         box-shadow: none;
-        background: rgba(0,0,0,0.15);
+        background: #fff;
         padding-left: 0.5rem;
         border-radius: 0;
     }
 
-    .navbar-default .dropdown-menu > li > a { color: rgba(255,255,255,0.9); }
-    .navbar-default .dropdown-menu > li > a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .navbar-default .dropdown-menu > li > a { color: #444; }
+    .navbar-default .dropdown-menu > li > a:hover { background: var(--cor-primaria); color: #fff; }
 
     .feat-grid { width: 50%; float: left; }
     .mail-grid { width: 50%; float: left; }

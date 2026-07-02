@@ -19,7 +19,9 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Righteous&family=Josefin+Sans&display=swap" rel="stylesheet">
+    @if(!empty($t['fonts']['google_url']))
+    <link href="{{ $t['fonts']['google_url'] }}" rel="stylesheet">
+    @endif
     <link rel="stylesheet" href="{{ asset('css/site.css') }}">
     @yield('styles')
 
@@ -27,6 +29,9 @@
         :root {
             --cor-primaria:   {{ $t['cor_primaria'] }};
             --cor-secundaria: {{ $t['cor_secundaria'] }};
+            --font-body:      '{{ $t['fonts']['body'] ?? 'Open Sans' }}';
+            --font-heading:   '{{ $t['fonts']['heading'] ?? 'Righteous' }}';
+            --font-accent:    '{{ $t['fonts']['accent'] ?? 'Josefin Sans' }}';
         }
     </style>
 

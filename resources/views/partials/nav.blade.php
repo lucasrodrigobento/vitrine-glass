@@ -35,11 +35,15 @@
     <div class="header-top">
         <div class="container">
 
-            <div class="logo">
+            <div class="logo logo--{{ $t['logo_header'] }}">
                 <h1>
                     <a href="{{ route('home') }}" class="logo-link">
-                        <img src="{{ asset($t['logo']) }}" width="80" alt="{{ $t['nome'] }}">
+                        @if(in_array($t['logo_header'], ['logo', 'ambos']))
+                        <img src="{{ asset($t['logo']) }}" alt="{{ $t['nome'] }}" class="logo-img">
+                        @endif
+                        @if(in_array($t['logo_header'], ['texto', 'ambos']))
                         <span class="logo-text">{{ $t['nome'] }}</span>
+                        @endif
                     </a>
                 </h1>
             </div>
@@ -131,7 +135,6 @@
                 </nav>
             </div>
 
-            <div class="clearfix"></div>
         </div>
     </div>
 </div>

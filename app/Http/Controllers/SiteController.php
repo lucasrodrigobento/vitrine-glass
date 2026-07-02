@@ -42,7 +42,7 @@ class SiteController extends Controller
                 $tenant->google_drive_folder_id
             );
 
-            $perPage = 12;
+            $perPage = 10;
             $page    = max(1, (int) $request->get('page', 1));
             $total   = count($allFiles);
             $items   = array_slice($allFiles, ($page - 1) * $perPage, $perPage);
@@ -59,9 +59,10 @@ class SiteController extends Controller
         }
 
         $images = GalleryImage::where('tenant_id', $tenant->id)
+            ->where('categoria', 'geral')
             ->where('ativo', true)
             ->orderBy('ordem')
-            ->paginate(12);
+            ->paginate(10);
 
         return view('catalogo', ['images' => $images, 'mode' => 'local']);
     }
