@@ -125,5 +125,7 @@ Por isso `DB_CONNECTION: sqlite` está fixo no compose — não depende do `.env
 |---|---|---|---|
 | BUG-01 | Container restart loop em "Rodando migrations..." | `->after('id')` em `Schema::table()` SQLite → full table rebuild silencioso → exit 1 | Removido `->after()` da migration 5. Reset volume: `docker compose down -v && docker compose up -d --build` |
 | BUG-02 | Migration tentando conectar MySQL mesmo com `.env` sqlite | `docker compose restart` não recarrega `env_file` — mantém vars da criação. Laravel lê OS env vars com precedência sobre `.env` | Adicionado `DB_CONNECTION: sqlite` fixo no `environment:` block do docker-compose.yml |
+| BUG-03 | `vitrine_db:/app/database` sobrepõe `database/migrations/` — novas migrations não chegam ao container via bind mount | Named volume monta sobre o diretório inteiro, apagando a visibilidade do bind mount. Via bind mount só chegam arquivos fora das pastas com volume | Alterado para `vitrine_db:/app/storage/db` — SQLite em `storage/db/database.sqlite`, migrations acessíveis normalmente |
+| BUG-04 | `Internal Server Error` — `__PHP_Incomplete_Class` no `ResolveTenant` middleware | PHP 8.4 levanta `TypeError` quando `Cache::remember` desserializa objeto Eloquent com retorno incompatível. Cache armazenava o model `Tenant` completo com serialização PHP | `ResolveTenant` agora cacheia só o ID (integer) e re-carrega o model fresh do DB. Eliminação completa do problema de serialização |
 
 *Atualizado: 2026-07-02*
