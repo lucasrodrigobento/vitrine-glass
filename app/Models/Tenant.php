@@ -10,7 +10,7 @@ class Tenant extends Model
 {
     protected $fillable = [
         'slug', 'nome', 'dominio', 'ativo',
-        'cor_primaria', 'cor_secundaria',
+        'cor_primaria', 'cor_secundaria', 'cor_texto', 'cor_rodape_fundo', 'cor_rodape_links',
         'font_body', 'font_heading', 'font_accent', 'font_google_url',
         'logo', 'favicon', 'og_image', 'logo_header',
         'whatsapp', 'whatsapp_exibir', 'email',
@@ -64,6 +64,9 @@ class Tenant extends Model
             'dominio'         => $this->dominio,
             'cor_primaria'    => $this->cor_primaria,
             'cor_secundaria'  => $this->cor_secundaria,
+            'cor_texto'        => $this->cor_texto        ?: '#6f7070',
+            'cor_rodape_fundo' => $this->cor_rodape_fundo ?: null,
+            'cor_rodape_links' => $this->cor_rodape_links ?: null,
             'fonts' => [
                 'body'       => $this->font_body       ?? 'Open Sans',
                 'heading'    => $this->font_heading    ?? 'Righteous',

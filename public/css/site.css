@@ -4,8 +4,10 @@
    ====================================================== */
 
 :root {
-    --cor-primaria:   #183b9f;
-    --cor-secundaria: #1a2a6c;
+    --cor-primaria:    #183b9f;
+    --cor-secundaria:  #1a2a6c;
+    --cor-texto:       #555;
+    --cor-rodape-fundo: var(--cor-primaria);
 }
 
 /* ── Base ── */
@@ -35,13 +37,13 @@ h6 { font-size: 0.8rem; }
 p {
     margin: 0;
     padding: 0;
-    color: #555;
+    color: var(--cor-texto, #555);
     line-height: 1.8em;
 }
 
 ul { padding: 0; margin: 0; }
 
-a, a:hover { text-decoration: none; color: #6f7070; }
+a, a:hover { text-decoration: none; color: var(--cor-texto, #6f7070); }
 
 /* ── Dot pattern ── */
 .dot {
@@ -67,7 +69,7 @@ a, a:hover { text-decoration: none; color: #6f7070; }
 }
 
 #topo li {
-    color: #6f7070;
+    color: var(--cor-texto, #6f7070);
     float: left;
     list-style: none;
     font-size: 13px;
@@ -75,7 +77,7 @@ a, a:hover { text-decoration: none; color: #6f7070; }
 }
 
 #topo li a {
-    color: #6f7070;
+    color: var(--cor-texto, #6f7070);
     text-decoration: none;
 }
 
@@ -83,7 +85,7 @@ a, a:hover { text-decoration: none; color: #6f7070; }
     font-size: 14px;
     vertical-align: middle;
     margin-right: 5px;
-    color: #6f7070;
+    color: var(--cor-texto, #6f7070);
 }
 
 .social-icons {
@@ -315,7 +317,6 @@ a, a:hover { text-decoration: none; color: #6f7070; }
 /* ── Dropdown in header ── */
 .navbar-default .dropdown-menu {
     border: none;
-    border-top: 3px solid var(--cor-primaria);
     border-radius: 0 0 6px 6px;
     box-shadow: 0 6px 16px rgba(0,0,0,.15);
     background: #fff;
@@ -453,7 +454,7 @@ h2.tittle {
 
 .feat-grid p {
     font-size: 1em;
-    color: var(--cor-primaria);
+    color: var(--cor-texto, #555);
 }
 
 /* ── Banner pages ── */
@@ -507,7 +508,7 @@ h2.tittle {
 
 .choose-grid p {
     font-size: 1em;
-    color: #555;
+    color: var(--cor-texto, #555);
     margin-top: 0.8em;
 }
 
@@ -526,7 +527,7 @@ h2.tittle {
     border: 1px solid #E9E9E9;
     width: 100%;
     background: none;
-    color: #555;
+    color: var(--cor-texto, #555);
     font-size: 1em;
     padding: 12px 10px;
 }
@@ -565,8 +566,9 @@ h2.tittle {
     padding-top: 0.5em;
 }
 
-.mail-grid p { color: #555; }
-.mail-grid p a { color: var(--cor-primaria); }
+.mail-grid p { color: var(--cor-texto, #555); }
+.mail-grid p a { color: var(--cor-texto, #555); }
+.mail-grid p a:hover { color: #333; text-decoration: underline; }
 
 .map iframe { width: 100%; min-height: 400px; }
 .map { margin-top: 3em; }
@@ -658,24 +660,24 @@ h2.tittle {
 .footer-w3l { padding: 5em 0; }
 
 .footer-grid h4 {
-    color: var(--cor-primaria);
+    color: var(--cor-rodape-links, var(--cor-primaria));
     font-size: 2em;
     margin-bottom: 1em;
 }
 
-.footer-grid p { font-size: 1em; color: #555; }
-.footer-grid p a { color: var(--cor-primaria); text-decoration: none; }
+.footer-grid p { font-size: 1em; color: var(--cor-texto, #555); }
+.footer-grid p a { color: var(--cor-rodape-links, var(--cor-primaria)); text-decoration: none; }
 .footer-grid p a:hover { opacity: 0.8; }
 
 .footer-grid ul { list-style: none; padding: 0; margin: 0; }
 .footer-grid ul li { margin-bottom: 0.4em; }
-.footer-grid ul li a { color: var(--cor-primaria); font-size: 1em; }
+.footer-grid ul li a { color: var(--cor-rodape-links, var(--cor-primaria)); font-size: 1em; }
 .footer-grid ul li a:hover { opacity: 0.8; }
 
 /* ── Copy section ── */
 .copy-section {
     padding: 2.7em 0;
-    background: var(--cor-primaria);
+    background: var(--cor-rodape-fundo, var(--cor-primaria));
     text-align: center;
     border-bottom: 1px dashed rgba(255,255,255,0.4);
     border-top: 1px dashed rgba(255,255,255,0.4);

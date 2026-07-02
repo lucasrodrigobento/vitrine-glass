@@ -66,12 +66,22 @@ class EmpresaResource extends Resource
                                 ->label('Cor Primária')
                                 ->required()
                                 ->default('#ed3237')
-                                ->helperText('Cor principal da marca — navbar, botões, destaques'),
+                                ->helperText('Cor principal da marca — navbar, botões, destaques, links do rodapé'),
                             Forms\Components\ColorPicker::make('cor_secundaria')
                                 ->label('Cor Secundária')
                                 ->required()
                                 ->default('#9e2016')
                                 ->helperText('Cor complementar — gradientes, hovers'),
+                            Forms\Components\ColorPicker::make('cor_texto')
+                                ->label('Cor do Texto (body)')
+                                ->default('#6f7070')
+                                ->helperText('Cor dos parágrafos, topbar e texto geral do site'),
+                            Forms\Components\ColorPicker::make('cor_rodape_fundo')
+                                ->label('Cor de Fundo do Rodapé (barra copyright)')
+                                ->helperText('Deixe em branco para usar a cor primária como fundo do rodapé'),
+                            Forms\Components\ColorPicker::make('cor_rodape_links')
+                                ->label('Cor dos Títulos e Links do Rodapé')
+                                ->helperText('Títulos (h4) e links nas colunas do rodapé. Deixe em branco para usar a cor primária'),
                             Forms\Components\Select::make('logo_header')
                                 ->label('Header: exibir')
                                 ->options([

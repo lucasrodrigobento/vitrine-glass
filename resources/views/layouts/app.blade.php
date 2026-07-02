@@ -27,11 +27,14 @@
 
     <style>
         :root {
-            --cor-primaria:   {{ $t['cor_primaria'] }};
-            --cor-secundaria: {{ $t['cor_secundaria'] }};
-            --font-body:      '{{ $t['fonts']['body'] ?? 'Open Sans' }}';
-            --font-heading:   '{{ $t['fonts']['heading'] ?? 'Righteous' }}';
-            --font-accent:    '{{ $t['fonts']['accent'] ?? 'Josefin Sans' }}';
+            --cor-primaria:    {{ $t['cor_primaria'] }};
+            --cor-secundaria:  {{ $t['cor_secundaria'] }};
+            --cor-texto:       {{ $t['cor_texto'] ?? '#6f7070' }};
+            --cor-rodape-fundo: {{ $t['cor_rodape_fundo'] ?? 'var(--cor-primaria)' }};
+            --cor-rodape-links: {{ $t['cor_rodape_links'] ?? 'var(--cor-primaria)' }};
+            --font-body:       '{{ $t['fonts']['body'] ?? 'Open Sans' }}';
+            --font-heading:    '{{ $t['fonts']['heading'] ?? 'Righteous' }}';
+            --font-accent:     '{{ $t['fonts']['accent'] ?? 'Josefin Sans' }}';
         }
     </style>
 
