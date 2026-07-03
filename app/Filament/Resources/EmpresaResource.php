@@ -157,9 +157,15 @@ class EmpresaResource extends Resource
                                 ->columnSpanFull()
                                 ->helperText('Pressione Enter após cada cidade'),
                             Forms\Components\TextInput::make('google_ads_id')
-                                ->label('ID Google Ads (Tag Manager)')
+                                ->label('ID Google Ads')
                                 ->maxLength(50)
-                                ->helperText('Ex: AW-666035862'),
+                                ->placeholder('AW-XXXXXXXXX')
+                                ->helperText('Tag de conversão do Google Ads. Encontrado em google.com/ads → Ferramentas → Tag do Google'),
+                            Forms\Components\TextInput::make('google_analytics_id')
+                                ->label('ID Google Analytics 4 (GA4)')
+                                ->maxLength(30)
+                                ->placeholder('G-XXXXXXXXXX')
+                                ->helperText('Measurement ID do GA4. Em analytics.google.com → Propriedade → Fluxos de dados → ID de medição'),
                             Forms\Components\TextInput::make('google_maps_query')
                                 ->label('Localização no Google Maps (endereço ou nome do local)')
                                 ->maxLength(255)

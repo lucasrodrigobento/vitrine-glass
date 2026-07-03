@@ -90,6 +90,47 @@ class SiteController extends Controller
         return back()->with('sucesso', 'Mensagem enviada com sucesso!');
     }
 
+    public function sitemap()
+    {
+        $t       = config('tenant');
+        $base    = rtrim(url('/'), '/');
+        $today   = now()->toDateString();
+        $servicos = collect($t['servicos'] ?? []);
+
+        $urls = [
+            ['loc' => $base . '/',         'changefreq' => 'weekly',  'priority' => '1.0'],
+            ['loc' => $base . '/empresa',  'changefreq' => 'monthly', 'priority' => '0.8'],
+            ['loc' => $base . '/catalogo', 'changefreq' => 'weekly',  'priority' => '0.7'],
+            ['loc' => $base . '/contato',  'changefreq' => 'monthly', 'priority' => '0.6'],
+        ];
+
+        foreach ($servicos as $s) {
+            if ($s['ativo']) {
+                $urls[] = [
+                    'loc'        => $base . '/servicos/' . $s['slug'],
+                    'changefreq' => 'monthly',
+                    'priority'   => '0.9',
+                ];
+            }
+        }
+
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
+            . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+
+        foreach ($urls as $u) {
+            $xml .= "  <url>\n"
+                . '    <loc>' . htmlspecialchars($u['loc'], ENT_XML1) . "</loc>\n"
+                . "    <lastmod>{$today}</lastmod>\n"
+                . "    <changefreq>{$u['changefreq']}</changefreq>\n"
+                . "    <priority>{$u['priority']}</priority>\n"
+                . "  </url>\n";
+        }
+
+        $xml .= '</urlset>';
+
+        return response($xml, 200, ['Content-Type' => 'application/xml; charset=utf-8']);
+    }
+
     public function servico(string $slug)
     {
         $t        = config('tenant');
