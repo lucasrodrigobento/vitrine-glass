@@ -1,37 +1,56 @@
 @extends('layouts.app')
-@php $t = config('tenant'); @endphp
+@php
+    $t    = config('tenant');
+    $heroH = $t['paginas']['home']['titulo_hero']    ?? '';
+    $heroS = $t['paginas']['home']['subtitulo_hero'] ?? '';
+@endphp
+
+@section('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+@endsection
 
 @section('content')
 
-{{-- Slider --}}
+{{-- Hero Slider --}}
 @if($slides->isNotEmpty())
-<div class="demo-2">
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            @foreach($slides as $i => $slide)
-            <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">
+<section class="hero-swiper" aria-label="Destaques {{ $t['nome'] }}">
+    <div class="swiper" id="heroSwiper">
+        <div class="swiper-wrapper">
+            @foreach($slides as $slide)
+            @php
+                $slideH   = $slide->titulo      ?: $heroH;
+                $slideS   = $slide->subtitulo   ?: $heroS;
+                $slideBtn = $slide->botao_label  ?: '';
+                $slideBtnUrl = $slide->botao_url ?: '';
+            @endphp
+            <div class="swiper-slide">
                 <img src="{{ Storage::url($slide->path) }}"
-                     class="d-block w-100"
                      alt="{{ $slide->legenda ?: $t['nome'] }}"
-                     loading="{{ $i === 0 ? 'eager' : 'lazy' }}">
-                @if($slide->legenda)
-                <div class="carousel-caption d-none d-md-block">
-                    <p>{{ $slide->legenda }}</p>
+                     class="hero-swiper__img"
+                     loading="{{ $loop->first ? 'eager' : 'lazy' }}">
+
+                <div class="hero-swiper__overlay" aria-hidden="true"></div>
+
+                @if($slideH)
+                <div class="hero-swiper__content">
+                    <h2>{{ $slideH }}</h2>
+                    @if($slideS)<p>{{ $slideS }}</p>@endif
+                    @if($slideBtn && $slideBtnUrl)
+                    <a href="{{ $slideBtnUrl }}" class="hero-swiper__cta">{{ $slideBtn }}</a>
+                    @endif
                 </div>
                 @endif
             </div>
             @endforeach
         </div>
+
         @if($slides->count() > 1)
-        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
+        <div class="swiper-button-prev" role="button" aria-label="Slide anterior"><i class="fa fa-chevron-left" aria-hidden="true"></i></div>
+        <div class="swiper-button-next" role="button" aria-label="Próximo slide"><i class="fa fa-chevron-right" aria-hidden="true"></i></div>
+        <div class="swiper-pagination"></div>
         @endif
     </div>
-</div>
+</section>
 @endif
 
 {{-- Features --}}
@@ -84,4 +103,40 @@
 </div>
 @endif
 
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+(function () {
+    var el = document.getElementById('heroSwiper');
+    if (!el) return;
+    new Swiper(el, {
+        effect: 'fade',
+        fadeEffect: { crossFade: true },
+        loop: {{ $slides->count() > 1 ? 'true' : 'false' }},
+        speed: 900,
+        @if($slides->count() > 1)
+        autoplay: {
+            delay: 4500,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+        },
+        navigation: {
+            prevEl: '#heroSwiper .swiper-button-prev',
+            nextEl: '#heroSwiper .swiper-button-next',
+        },
+        pagination: {
+            el: '#heroSwiper .swiper-pagination',
+            clickable: true,
+        },
+        @endif
+        keyboard: { enabled: true },
+        a11y: {
+            prevSlideMessage: 'Slide anterior',
+            nextSlideMessage: 'Próximo slide',
+        },
+    });
+})();
+</script>
 @endsection

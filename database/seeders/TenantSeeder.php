@@ -65,6 +65,7 @@ class TenantSeeder extends Seeder
                 'areas_atendidas' => ['Goiânia', 'Aparecida de Goiânia', 'Senador Canedo', 'Anápolis', 'Goianira'],
                 'google_ads_id'         => 'AW-666035862',
                 'google_maps_embed'     => null,
+                'google_maps_query'     => 'Goiânia, GO, Brasil',
                 'google_drive_api_key'  => 'AIzaSyA1BlRpL0Hq-l_4Ifc2HHyzteUp9QmN4Mc',
                 'google_drive_folder_id'=> '1qYHQqfFC0F8sdQzv3xVxlBax8ZzLR2rK',
                 'font_body'       => 'Open Sans',
@@ -100,11 +101,11 @@ class TenantSeeder extends Seeder
             ['slug' => 'cortina',  'titulo' => 'Cortinas e Películas',  'descricao' => 'Películas de controle solar, proteção UV, privacidade e cortinas para residências e empresas.',        'ordem' => 2, 'mostrar_menu' => false],
         ]);
 
-        // Slides
+        // Slides — imagens da galeria (≥1440×810px)
         $this->seedSlides($tenant, [
-            ['src' => "{$source}/images/ba1.jpg", 'dest' => 'tenants/slides/lider-vidros/slide-1.jpg', 'legenda' => null,                             'ordem' => 0],
-            ['src' => "{$source}/images/ba2.jpg", 'dest' => 'tenants/slides/lider-vidros/slide-2.jpg', 'legenda' => null,                             'ordem' => 1],
-            ['src' => "{$source}/images/ba3.jpg", 'dest' => 'tenants/slides/lider-vidros/slide-3.jpg', 'legenda' => 'Líder Vidros — Goiânia e região', 'ordem' => 2],
+            ['src' => "{$source}/images/catalogo/IMG-20210618-WA0123.jpeg", 'dest' => 'tenants/slides/lider-vidros/slide-1.jpeg', 'legenda' => null,                             'ordem' => 0],
+            ['src' => "{$source}/images/catalogo/IMG-20220930-WA0179.jpeg", 'dest' => 'tenants/slides/lider-vidros/slide-2.jpeg', 'legenda' => null,                             'ordem' => 1],
+            ['src' => "{$source}/images/catalogo/IMG-20230111-WA0077.jpeg", 'dest' => 'tenants/slides/lider-vidros/slide-3.jpeg', 'legenda' => 'Líder Vidros — Goiânia e região', 'ordem' => 2],
         ]);
 
         // Features da home
@@ -267,10 +268,7 @@ class TenantSeeder extends Seeder
 
     private function seedSlides(Tenant $tenant, array $slides): void
     {
-        // Limpa slides existentes deste tenant para re-seed limpo
-        if ($tenant->wasRecentlyCreated) {
-            TenantSlide::where('tenant_id', $tenant->id)->delete();
-        }
+        TenantSlide::where('tenant_id', $tenant->id)->delete();
 
         foreach ($slides as $slide) {
             $path = $this->copyAsset($slide['src'], $slide['dest']);
@@ -280,7 +278,15 @@ class TenantSeeder extends Seeder
             }
             TenantSlide::updateOrCreate(
                 ['tenant_id' => $tenant->id, 'path' => $path],
-                ['legenda' => $slide['legenda'], 'ordem' => $slide['ordem'], 'ativo' => true]
+                [
+                    'legenda'     => $slide['legenda']     ?? null,
+                    'titulo'      => $slide['titulo']      ?? null,
+                    'subtitulo'   => $slide['subtitulo']   ?? null,
+                    'botao_label' => $slide['botao_label'] ?? null,
+                    'botao_url'   => $slide['botao_url']   ?? null,
+                    'ordem'       => $slide['ordem'],
+                    'ativo'       => true,
+                ]
             );
         }
     }

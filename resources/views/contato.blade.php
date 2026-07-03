@@ -77,9 +77,17 @@
 
         </div>
 
-        @if(!empty($t['google_maps_embed']))
+        @php
+            $mapSrc = null;
+            if (!empty($t['google_maps_query'])) {
+                $mapSrc = 'https://maps.google.com/maps?q=' . urlencode($t['google_maps_query']) . '&output=embed&hl=pt-BR';
+            } elseif (!empty($t['google_maps_embed'])) {
+                $mapSrc = $t['google_maps_embed'];
+            }
+        @endphp
+        @if($mapSrc)
         <div class="map">
-            <iframe src="{{ $t['google_maps_embed'] }}"
+            <iframe src="{{ $mapSrc }}"
                     style="border:0;" allowfullscreen="" loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade" title="Localização"></iframe>
         </div>

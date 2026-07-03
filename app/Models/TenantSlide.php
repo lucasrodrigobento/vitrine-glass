@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TenantSlide extends Model
 {
-    protected $fillable = ['tenant_id', 'path', 'legenda', 'ordem', 'ativo'];
+    protected $fillable = [
+        'tenant_id', 'path', 'legenda', 'ordem', 'ativo',
+        'titulo', 'subtitulo', 'botao_label', 'botao_url',
+    ];
 
     protected $casts = ['ativo' => 'boolean'];
 

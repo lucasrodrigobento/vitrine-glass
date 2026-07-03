@@ -160,11 +160,17 @@ class EmpresaResource extends Resource
                                 ->label('ID Google Ads (Tag Manager)')
                                 ->maxLength(50)
                                 ->helperText('Ex: AW-666035862'),
-                            Forms\Components\Textarea::make('google_maps_embed')
-                                ->label('Embed Google Maps')
-                                ->rows(3)
+                            Forms\Components\TextInput::make('google_maps_query')
+                                ->label('Localização no Google Maps (endereço ou nome do local)')
+                                ->maxLength(255)
                                 ->columnSpanFull()
-                                ->helperText('Cole aqui o src do iframe gerado pelo Google Maps → Compartilhar → Incorporar'),
+                                ->placeholder('Ex: Rua das Flores, 123 – Goiânia, GO')
+                                ->helperText('Digite um endereço ou nome do estabelecimento — o mapa será gerado automaticamente. Deixe em branco para ocultar o mapa.'),
+                            Forms\Components\Textarea::make('google_maps_embed')
+                                ->label('Embed Google Maps (URL avançada — opcional)')
+                                ->rows(2)
+                                ->columnSpanFull()
+                                ->helperText('Use somente se precisar de um ponto exato. Gere em Google Maps → Compartilhar → Incorporar → copie apenas o valor do atributo src. Se "Localização" estiver preenchida acima, este campo é ignorado.'),
                         ])->columns(2),
 
                     Forms\Components\Tabs\Tab::make('SEO')
@@ -203,14 +209,67 @@ class EmpresaResource extends Resource
                         ->icon('heroicon-o-home')
                         ->schema([
                             Forms\Components\Section::make('Hero (Banner Principal)')
+                                ->description('Título e subtítulo globais — usados como fallback nos slides que não tiverem texto próprio')
                                 ->schema([
                                     Forms\Components\TextInput::make('hero_titulo')
-                                        ->label('Título do Hero')
+                                        ->label('Título padrão do Hero')
                                         ->maxLength(255),
                                     Forms\Components\TextInput::make('hero_subtitulo')
-                                        ->label('Subtítulo do Hero')
+                                        ->label('Subtítulo padrão do Hero')
                                         ->maxLength(255),
                                 ])->columns(2),
+
+                            Forms\Components\Section::make('Slides do Hero')
+                                ->description('⚠️ Imagens devem ter no mínimo 1440×810px. Recomendado: 1920×1080px (Full HD). Imagens menores ficam desfocadas em monitores grandes.')
+                                ->schema([
+                                    Forms\Components\Repeater::make('slides')
+                                        ->relationship()
+                                        ->label(false)
+                                        ->schema([
+                                            Forms\Components\FileUpload::make('path')
+                                                ->label('Imagem do Slide')
+                                                ->image()
+                                                ->required()
+                                                ->directory('tenants/slides')
+                                                ->maxSize(8192)
+                                                ->rules(['dimensions:min_width=1440,min_height=810'])
+                                                ->validationMessages(['dimensions' => 'A imagem deve ter no mínimo 1440×810px para boa qualidade no hero.'])
+                                                ->columnSpanFull()
+                                                ->helperText('Mínimo: 1440×810px — Ideal: 1920×1080px (Full HD). Formatos: JPG, PNG ou WebP.'),
+                                            Forms\Components\TextInput::make('titulo')
+                                                ->label('Título do slide')
+                                                ->maxLength(150)
+                                                ->placeholder('Ex: Vidraçaria em Goiânia')
+                                                ->helperText('Deixe em branco para usar o título global acima'),
+                                            Forms\Components\TextInput::make('subtitulo')
+                                                ->label('Subtítulo do slide')
+                                                ->maxLength(255)
+                                                ->placeholder('Ex: Box banheiro, espelhos e esquadrias'),
+                                            Forms\Components\TextInput::make('botao_label')
+                                                ->label('Texto do botão CTA')
+                                                ->maxLength(100)
+                                                ->placeholder('Ex: Ver serviços')
+                                                ->helperText('Oculto no mobile. Deixe em branco para não exibir botão'),
+                                            Forms\Components\TextInput::make('botao_url')
+                                                ->label('URL do botão CTA')
+                                                ->maxLength(500)
+                                                ->placeholder('Ex: /servicos ou https://...')
+                                                ->helperText('Obrigatório se houver texto no botão acima'),
+                                            Forms\Components\TextInput::make('ordem')
+                                                ->label('Ordem')
+                                                ->numeric()
+                                                ->default(0),
+                                            Forms\Components\Toggle::make('ativo')
+                                                ->label('Ativo')
+                                                ->default(true),
+                                        ])->columns(2)
+                                        ->orderColumn('ordem')
+                                        ->addActionLabel('+ Adicionar Slide')
+                                        ->collapsible()
+                                        ->itemLabel(fn(array $state): string =>
+                                            $state['titulo'] ?? ($state['path'] ? 'Slide' : 'Novo slide')
+                                        ),
+                                ]),
 
                             Forms\Components\Section::make('Destaques da Home (Features)')
                                 ->description('Blocos de imagem com título e descrição exibidos na página inicial')

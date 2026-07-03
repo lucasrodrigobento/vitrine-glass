@@ -342,14 +342,124 @@ a, a:hover { text-decoration: none; color: var(--cor-texto, #6f7070); }
 
 .dropdown-toggle::after { display: none; }  /* remove caret Bootstrap 5 */
 
-/* ── Hero slider ── */
-.demo-2 { border-top: 2px solid var(--cor-primaria); }
-
-.demo-2 .carousel-item img {
+/* ── Hero slider (Swiper v11) ── */
+.hero-swiper {
+    position: relative;
+    width: 100%;
     height: 520px;
+    overflow: hidden;
+    border-top: 2px solid var(--cor-primaria);
+}
+
+.hero-swiper .swiper { height: 100%; }
+
+.hero-swiper .swiper-slide {
+    position: relative;
+    height: 100%;
+}
+
+.hero-swiper__img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     object-position: center;
-    width: 100%;
+    display: block;
+}
+
+/* overlay por slide — faz fade junto com a imagem */
+.hero-swiper__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,.06) 0%, rgba(0,0,0,.54) 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* conteúdo (título + subtítulo + CTA) por slide */
+.hero-swiper__content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    padding: 0 2em 3.5em;
+    text-align: center;
+    pointer-events: none;
+}
+
+.hero-swiper__content h2 {
+    color: #fff;
+    font-family: var(--font-heading, 'Righteous'), cursive;
+    font-size: 2.8em;
+    text-shadow: 0 2px 14px rgba(0,0,0,.55);
+    margin: 0 0 0.3em;
+    line-height: 1.15;
+}
+
+.hero-swiper__content p {
+    color: rgba(255,255,255,.92);
+    font-size: 1.2em;
+    text-shadow: 0 1px 7px rgba(0,0,0,.5);
+    margin: 0 0 1.6em;
+}
+
+/* botão CTA — oculto no mobile */
+.hero-swiper__cta {
+    display: inline-block;
+    padding: 0.65em 2.2em;
+    border: 2px solid rgba(255,255,255,.85);
+    color: #fff;
+    font-family: var(--font-heading, 'Righteous'), cursive;
+    font-size: 0.95em;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    pointer-events: auto;
+    transition: background .25s, color .25s, border-color .25s;
+    backdrop-filter: blur(2px);
+}
+
+.hero-swiper__cta:hover {
+    background: #fff;
+    color: var(--cor-primaria);
+    border-color: #fff;
+}
+
+/* setas de navegação */
+.hero-swiper .swiper-button-prev,
+.hero-swiper .swiper-button-next {
+    color: rgba(255,255,255,.75);
+    --swiper-navigation-size: 26px;
+    transition: color .2s;
+    z-index: 10;
+}
+
+.hero-swiper .swiper-button-prev::after,
+.hero-swiper .swiper-button-next::after { display: none; }
+
+.hero-swiper .swiper-button-prev i,
+.hero-swiper .swiper-button-next i { font-size: 1.1em; }
+
+.hero-swiper .swiper-button-prev:hover,
+.hero-swiper .swiper-button-next:hover { color: #fff; }
+
+/* paginação (bolinhas) */
+.hero-swiper .swiper-pagination { bottom: 18px; z-index: 10; }
+
+.hero-swiper .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background: rgba(255,255,255,.45);
+    opacity: 1;
+    transition: background .3s, transform .3s;
+}
+
+.hero-swiper .swiper-pagination-bullet-active {
+    background: var(--cor-primaria);
+    transform: scale(1.35);
 }
 
 /* ── Sections padding ── */
@@ -567,7 +677,9 @@ h2.tittle {
 }
 
 .mail-grid p { color: var(--cor-texto, #555); }
-.mail-grid p a { color: var(--cor-texto, #555); }
+.mail-grid p i { color: var(--cor-primaria); }
+.mail-grid p a { color: var(--cor-texto, #555); text-decoration: none; }
+.mail-grid p a i { color: var(--cor-primaria); }
 .mail-grid p a:hover { color: #333; text-decoration: underline; }
 
 .map iframe { width: 100%; min-height: 400px; }
@@ -665,14 +777,14 @@ h2.tittle {
     margin-bottom: 1em;
 }
 
-.footer-grid p { font-size: 1em; color: var(--cor-texto, #555); }
+.footer-grid p { font-size: 1em; color: var(--cor-rodape-links, var(--cor-primaria)); }
 .footer-grid p a { color: var(--cor-rodape-links, var(--cor-primaria)); text-decoration: none; }
-.footer-grid p a:hover { opacity: 0.8; }
+.footer-grid p a:hover { opacity: 0.75; text-decoration: underline; }
 
 .footer-grid ul { list-style: none; padding: 0; margin: 0; }
 .footer-grid ul li { margin-bottom: 0.4em; }
-.footer-grid ul li a { color: var(--cor-rodape-links, var(--cor-primaria)); font-size: 1em; }
-.footer-grid ul li a:hover { opacity: 0.8; }
+.footer-grid ul li a { color: var(--cor-rodape-links, var(--cor-primaria)); font-size: 1em; text-decoration: none; }
+.footer-grid ul li a:hover { opacity: 0.75; text-decoration: underline; }
 
 /* ── Copy section ── */
 .copy-section {
@@ -784,7 +896,10 @@ h2.tittle {
 
 @media (max-width: 768px) {
     #topo { display: none; }
-    .demo-2 .carousel-item img { height: 260px; }
+    .hero-swiper { height: 280px; }
+    .hero-swiper__content h2 { font-size: 1.8em; }
+    .hero-swiper__content p  { font-size: 1em; }
+    .hero-swiper__cta { display: none; }
     h1 { font-size: 1.75rem; }
     h2 { font-size: 1.5rem; }
     .features-w3 { padding-bottom: 3em; }

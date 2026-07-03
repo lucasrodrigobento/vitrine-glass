@@ -10,16 +10,16 @@
     <div class="container">
         <h3>
             <a href="{{ route('home') }}">Início</a> /
-            <span>{{ $p['titulo'] }}</span>
+            <span>Empresa</span>
         </h3>
     </div>
 </div>
 
 <div class="about-w3">
     <div class="container">
-        <h2 class="tittle">{{ $p['titulo'] }}</h2>
         <div class="about-grids row">
-            <div class="col-md-8 about-grid1">
+            <div class="col-12 about-grid1">
+                <h4>{{ $p['titulo'] }}</h4>
                 <p>{{ $p['descricao'] }}</p>
             </div>
         </div>
@@ -28,7 +28,6 @@
 
 <div class="whychoose-w3ls">
     <div class="container">
-        <h2 class="tittle">Nossa Filosofia</h2>
         <div class="choose-grids row">
             <div class="col-md-4 choose-grid">
                 <i class="fa fa-bullseye"></i>
@@ -41,7 +40,7 @@
                 <p>{{ $p['visao'] }}</p>
             </div>
             <div class="col-md-4 choose-grid">
-                <i class="fa fa-heart"></i>
+                <i class="fa fa-users"></i>
                 <h4>Valores</h4>
                 <p>{{ $p['valores'] }}</p>
             </div>
