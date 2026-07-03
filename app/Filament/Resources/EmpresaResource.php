@@ -166,6 +166,11 @@ class EmpresaResource extends Resource
                                 ->maxLength(30)
                                 ->placeholder('G-XXXXXXXXXX')
                                 ->helperText('Measurement ID do GA4. Em analytics.google.com → Propriedade → Fluxos de dados → ID de medição'),
+                            Forms\Components\TextInput::make('google_ads_whatsapp_label')
+                                ->label('Label de conversão — WhatsApp (Google Ads)')
+                                ->maxLength(80)
+                                ->placeholder('AW-XXXXXXXXX/xxxxxx')
+                                ->helperText('Gerado em Google Ads → Metas → Ação de conversão → Tag. Formato: AW-ID/label'),
                             Forms\Components\TextInput::make('google_maps_query')
                                 ->label('Localização no Google Maps (endereço ou nome do local)')
                                 ->maxLength(255)

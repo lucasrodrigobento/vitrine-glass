@@ -134,6 +134,9 @@
             var link = e.target.closest('a[href*="api.whatsapp.com"]');
             if (link && typeof gtag !== 'undefined') {
                 gtag('event', 'whatsapp_click', { event_category: 'contato' });
+                @if(!empty($t['google_ads_whatsapp_label']))
+                gtag('event', 'conversion', { send_to: '{{ $t['google_ads_whatsapp_label'] }}' });
+                @endif
             }
         });
         @if(session('sucesso'))
